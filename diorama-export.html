@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Kamiwa paper diorama</title>
+<style>html,body{margin:0;height:100%;background:transparent;overflow:hidden}canvas{display:block}</style>
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.184.0/build/three.module.js",
+    "three/addons/controls/OrbitControls.js": "https://unpkg.com/three@0.184.0/examples/jsm/controls/OrbitControls.js",
+    "three/addons/exporters/OBJExporter.js": "https://unpkg.com/three@0.184.0/examples/jsm/exporters/OBJExporter.js",
+    "three/addons/exporters/GLTFExporter.js": "https://unpkg.com/three@0.184.0/examples/jsm/exporters/GLTFExporter.js"
+  },
+  "integrity": {
+    "https://unpkg.com/three@0.184.0/build/three.module.js": "sha384-8FCZ1eVO6it4+pbec2aDtnTrwjWXZLJRC+MAGCIPDgsYnUrl/E0A2YlF8ioMKI/J",
+    "https://unpkg.com/three@0.184.0/build/three.core.js": "sha384-dw2ooPewaEIrAgl6oFDBmmBWCE9oW9LxRGcfwZ0hLvEprzo202wXl7vCYHRlSnOT",
+    "https://unpkg.com/three@0.184.0/examples/jsm/controls/OrbitControls.js": "sha384-4rziNxOBZKQ69i+w+f89KJ55TCYquwchVbByQwmaOeIOXdOU2PLDn3kOfXHwIJC9",
+    "https://unpkg.com/three@0.184.0/examples/jsm/exporters/OBJExporter.js": "sha384-nbwtoZENJD3Vq+ACK0CuGQdPMuDWHkamC2KJD70EV5nfg6jQjfppKOea07YJN+N3",
+    "https://unpkg.com/three@0.184.0/examples/jsm/exporters/GLTFExporter.js": "sha384-VofkvpG6HERhFCYbsUOHeNXBCqID2nfqkQqnVzE1jc/oPcz+qJ13ADdXH08hE+cQ"
+  }
+}
+</script>
+</head>
+<body>
+<script type="module">
+import * as THREE from 'three';
+
+const q = new URLSearchParams(location.search);
+const cfg = { scene: +(q.get('scene') ?? 0), static: q.get('static') === '1', mobile: q.get('mobile') === '1', exp: q.get('export') || (location.pathname.includes('diorama-export') ? '1600x1000' : null) };
+if (cfg.exp) { const [ew, eh] = cfg.exp.split('x').map(Number); cfg.size = [ew || 1600, eh || 1000]; cfg.static = true; document.documentElement.style.height = 'auto'; document.body.style.cssText = `margin:0;width:${cfg.size[0]}px;height:${cfg.size[1]}px;overflow:visible;background:transparent`; }
+
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance', preserveDrawingBuffer: true });
+renderer.setPixelRatio(cfg.exp ? 1 : Math.min(devicePixelRatio, 2));
+renderer.setClearColor(0x000000, 0);
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.08;
+document.body.appendChild(renderer.domElement);
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(24, 1, 0.5, 200);
+scene.add(new THREE.HemisphereLight(0xfff3df, 0x8a7a68, 0.95));
+const sun = new THREE.DirectionalLight(0xfff0d8, 2.4);
+sun.position.set(7, 13, 8);
+sun.castShadow = true;
+sun.shadow.mapSize.set(2048, 2048);
+Object.assign(sun.shadow.camera, { left: -8, right: 8, top: 8, bottom: -8, near: 1, far: 40 });
+sun.shadow.bias = -0.0005; sun.shadow.normalBias = 0.03; sun.shadow.radius = 4;
+scene.add(sun);
+const fill = new THREE.DirectionalLight(0xc9d4ff, 0.55); fill.position.set(-9, 5, -7); scene.add(fill);
+
+const world = new THREE.Group(); scene.add(world);
+const rig = new THREE.Group(); world.add(rig);
+
+// ---------- helpers ----------
+const mats = {};
+const M = (c, o = {}) => { const k = c + JSON.stringify(o); return mats[k] || (mats[k] = new THREE.MeshStandardMaterial(Object.assign({ color: c, roughness: 0.92, metalness: 0, flatShading: true }, o))); };
+const mesh = (g, m, x = 0, y = 0, z = 0, parent) => { const o = new THREE.Mesh(g, m); o.position.set(x, y, z); o.castShadow = true; o.receiveShadow = true; (parent || rig).add(o); return o; };
+const grp = (x = 0, y = 0, z = 0, parent) => { const g = new THREE.Group(); g.position.set(x, y, z); (parent || rig).add(g); return g; };
+let seed = 7; const rnd = () => { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; };
+
+function blobShape(r, n = 9, wobble = 0.34) {
+  const pts = []; for (let i = 0; i < n; i++) { const a = i / n * Math.PI * 2, rr = r * (0.84 + rnd() * wobble); pts.push(new THREE.Vector3(Math.cos(a) * rr, Math.sin(a) * rr, 0)); }
+  const curve = new THREE.CatmullRomCurve3(pts, true, 'catmullrom', 0.6);
+  return new THREE.Shape(curve.getPoints(72).map(p => new THREE.Vector2(p.x, p.y)));
+}
+function terrace(r, depth, color, y, x = 0, z = 0, opts = {}, parent) {
+  const g = new THREE.ExtrudeGeometry(blobShape(r, opts.n || 9, opts.wobble), { depth, bevelEnabled: true, bevelThickness: 0.03, bevelSize: 0.03, bevelSegments: 1, curveSegments: 12 });
+  g.rotateX(-Math.PI / 2);
+  return mesh(g, M(color, { flatShading: false, roughness: opts.rough ?? 0.9 }), x, y, z, parent);
+}
+const box = (w, h, d, c, x, y, z, p) => mesh(new THREE.BoxGeometry(w, h, d), M(c), x, y, z, p);
+const cyl = (rt, rb, h, seg, c, x, y, z, p, smooth) => mesh(new THREE.CylinderGeometry(rt, rb, h, seg), M(c, smooth ? { flatShading: false } : {}), x, y, z, p);
+
+function hipRoof(w, d, h, c, x, y, z, p) { const g = new THREE.ConeGeometry(Math.SQRT1_2, h, 4); g.rotateY(Math.PI / 4); g.scale(w, 1, d); g.translate(0, h / 2, 0); return mesh(g, M(c), x, y, z, p); }
+function gableRoof(w, d, h, c, x, y, z, p) { const s = new THREE.Shape([new THREE.Vector2(-d / 2, 0), new THREE.Vector2(d / 2, 0), new THREE.Vector2(0, h)]); const g = new THREE.ExtrudeGeometry(s, { depth: w, bevelEnabled: false }); g.rotateY(-Math.PI / 2); g.translate(-w / 2 + w, 0, 0); g.center(); g.translate(0, h / 2, 0); return mesh(g, M(c), x, y, z, p); }
+function house(o) { const { x, z, w, d, h, wall = 0xF1E6D2, roof = 0x2C3557, type = 'hip', rh = 0.45, ov = 0.28, rot = 0, tier = false } = o; const g = grp(x, G, z); g.rotation.y = rot;
+  box(w, h, d, wall, 0, h / 2, 0, g);
+  box(w + 0.1, 0.06, d + 0.1, 0x6B4A2B, 0, 0.03, 0, g); // sill
+  if (type === 'hip') hipRoof(w + ov * 2, d + ov * 2, rh, roof, 0, h - 0.02, 0, g); else gableRoof(w + ov, d + ov * 2, rh, roof, 0, h - 0.02, 0, g);
+  if (tier) { box(w * 0.55, h * 0.5, d * 0.55, wall, 0, h + rh * 0.55 + h * 0.2, 0, g); hipRoof(w * 0.55 + ov * 1.6, d * 0.55 + ov * 1.6, rh * 0.8, roof, 0, h + rh * 0.55 + h * 0.45, 0, g); }
+  // door + windows
+  box(w * 0.22, h * 0.6, 0.02, 0x3A2E24, 0, h * 0.3, d / 2 + 0.01, g);
+  box(w * 0.18, h * 0.32, 0.02, 0xE9D9B8, -w * 0.3, h * 0.55, d / 2 + 0.01, g); box(w * 0.18, h * 0.32, 0.02, 0xE9D9B8, w * 0.3, h * 0.55, d / 2 + 0.01, g);
+  return g; }
+function pagoda(x, z, s) { const g = grp(x, G, z); let y = 0; [1, 0.78, 0.58].forEach((t, i) => { const w = s * t, hh = s * 0.5 - i * 0.04; box(w, hh, w, 0xF1E6D2, 0, y + hh / 2, 0, g); box(w * 0.3, hh * 0.5, 0.02, 0x3A2E24, 0, y + hh * 0.35, w / 2 + 0.01, g); y += hh; hipRoof(w + s * 0.55, w + s * 0.55, s * 0.32, 0x1F2A5C, 0, y - 0.02, 0, g); y += s * 0.24; }); cyl(0.02, 0.05, s * 0.5, 6, 0xC9A227, 0, y + s * 0.2, 0, g); return g; }
+function torii(x, z, s, rot = 0) { const g = grp(x, G, z); g.rotation.y = rot; const V = 0xC8412B; cyl(0.07 * s, 0.09 * s, 1.5 * s, 10, V, -0.6 * s, 0.75 * s, 0, g, true); cyl(0.07 * s, 0.09 * s, 1.5 * s, 10, V, 0.6 * s, 0.75 * s, 0, g, true);
+  box(1.9 * s, 0.12 * s, 0.18 * s, V, 0, 1.5 * s, 0, g); box(2.0 * s, 0.08 * s, 0.22 * s, 0x1C1917, 0, 1.6 * s, 0, g); box(1.5 * s, 0.09 * s, 0.12 * s, V, 0, 1.15 * s, 0, g); box(0.12 * s, 0.25 * s, 0.1 * s, V, 0, 1.33 * s, 0, g); return g; }
+function pine(x, z, s) { const g = grp(x, G, z); cyl(0.05 * s, 0.08 * s, 0.6 * s, 6, 0x6B4A2B, 0, 0.3 * s, 0, g); [[0.5, 0.55, 0.45], [0.4, 0.5, 0.85], [0.28, 0.45, 1.2]].forEach(([r, h, y]) => mesh(new THREE.ConeGeometry(r * s, h * s, 6), M(0x3F5A46), 0, y * s, 0, g)); return g; }
+function maple(x, z, s, c = 0xC8412B) { const g = grp(x, G, z); cyl(0.04 * s, 0.07 * s, 0.55 * s, 6, 0x5A3F2A, 0, 0.27 * s, 0, g); const cols = [c, shade(c, 1.15), shade(c, 0.85)]; [[0, 0.75, 0, 0.42], [0.25, 0.6, 0.1, 0.3], [-0.22, 0.62, -0.08, 0.28], [0.05, 0.95, -0.2, 0.26]].forEach(([dx, dy, dz, r], i) => mesh(new THREE.IcosahedronGeometry(r * s, 0), M(cols[i % 3]), dx * s, dy * s, dz * s, g)); return g; }
+function shade(hex, f) { const c = new THREE.Color(hex); c.r = f >= 1 ? c.r + (1 - c.r) * (f - 1) : c.r * f; c.g = f >= 1 ? c.g + (1 - c.g) * (f - 1) : c.g * f; c.b = f >= 1 ? c.b + (1 - c.b) * (f - 1) : c.b * f; return c.getHex(); }
+function lantern(x, z, h = 0.55) { const g = grp(x, G, z); cyl(0.015, 0.02, h, 6, 0x1C1917, 0, h / 2, 0, g); const m = new THREE.MeshStandardMaterial({ color: 0xE2472E, emissive: 0xFF7A2E, emissiveIntensity: 0.9, roughness: 0.6, flatShading: true }); mesh(new THREE.BoxGeometry(0.16, 0.2, 0.16), m, 0, h + 0.1, 0, g); box(0.18, 0.03, 0.18, 0x1C1917, 0, h + 0.21, 0, g); return g; }
+function stoneLantern(x, z) { const g = grp(x, G, z); const S = 0xB8B0A2; cyl(0.14, 0.17, 0.08, 6, S, 0, 0.04, 0, g); cyl(0.05, 0.06, 0.35, 6, S, 0, 0.25, 0, g); box(0.2, 0.16, 0.2, 0xCFC7B8, 0, 0.5, 0, g); mesh(new THREE.ConeGeometry(0.2, 0.12, 4), M(S), 0, 0.64, 0, g); return g; }
+function bridge(x, z, rot = 0, r = 0.78) { const g = grp(x, G + 0.05, z); g.rotation.y = rot; const H = 0.32; // deck arc rests on the banks, spans the pond
+  const deck = mesh(new THREE.TorusGeometry(r, 0.05, 4, 20, Math.PI), M(0xC8412B), 0, 0, 0, g); deck.scale.set(1, H / r, 2.4); deck.castShadow = false;
+  [-0.15, 0.15].forEach(dz => { for (let i = 0; i <= 6; i++) { const a = Math.PI * i / 6; const px = Math.cos(a) * r, py = Math.sin(a) * H; cyl(0.012, 0.012, 0.16, 4, 0xA53420, px, py + 0.08, dz, g); } const rail = mesh(new THREE.TorusGeometry(r, 0.014, 4, 20, Math.PI), M(0xA53420), 0, 0.16, dz, g); rail.scale.set(1, H / r, 1); });
+  [-1, 1].forEach(side => box(0.22, 0.1, 0.42, 0xD4BF96, side * (r + 0.02), 0.0, 0, g)); return g; }
+function mountain(x, z, r, h, c) { const g = new THREE.ConeGeometry(r, h, 7, 2); const p = g.attributes.position; for (let i = 0; i < p.count; i++) { const y = p.getY(i); if (y < h / 2 - 0.01) { p.setX(i, p.getX(i) * (0.85 + rnd() * 0.3)); p.setZ(i, p.getZ(i) * (0.85 + rnd() * 0.3)); if (y > -h / 2 + 0.01) p.setY(i, y + (rnd() - 0.5) * h * 0.18); } } g.computeVertexNormals(); return mesh(g, M(c), x, G + h / 2 - 0.05, z); }
+function path(points, w = 0.16, c = 0xD9C8A6) { const curve = new THREE.CatmullRomCurve3(points.map(([x, z]) => new THREE.Vector3(x, 0, z))); const m = mesh(new THREE.TubeGeometry(curve, 40, w, 6, false), M(c, { flatShading: false }), 0, G + 0.015, 0); m.scale.y = 0.18; m.castShadow = false; return m; }
+function rock(x, z, s) { const g = grp(x, G, z); [[0, 0.12, 0, 0.18], [0.18, 0.08, 0.05, 0.12], [-0.14, 0.07, 0.1, 0.1]].forEach(([dx, dy, dz, r]) => mesh(new THREE.IcosahedronGeometry(r * s, 0), M(0x9A968E), dx * s, dy * s, dz * s, g)); return g; }
+function moss(x, z, r, c = 0x7A8F5A) { return terrace(r, 0.06, c, G, x, z, { n: 7, wobble: 0.4 }); }
+
+// ---------- base island ----------
+const G = 0.36 + 0.3 + 0.3 + 0.25; // island top
+const BASE = [];
+const T = (...a) => { const m = terrace(...a); m.userData.introDelay = BASE.length * 0.16; BASE.push(m); return m; };
+T(5.7, 0.14, 0x26365F, 0, 0, 0, { rough: 0.55, n: 10, wobble: 0.22 });
+T(4.95, 0.14, 0x34497F, 0.14, 0.1, -0.1, { rough: 0.55, n: 10, wobble: 0.25 });
+T(4.25, 0.14, 0x4661A3, 0.28, -0.1, 0.1, { rough: 0.5, n: 9, wobble: 0.26 });
+T(3.55, 0.3, 0xD4BF96, 0.36, 0, 0, { n: 9, wobble: 0.3 });
+T(3.05, 0.3, 0xE4D4B4, 0.66, 0.08, -0.05, { n: 9, wobble: 0.3 });
+T(2.75, 0.25, 0xEFE3CB, 0.96, -0.05, 0.05, { n: 8, wobble: 0.28 });
+
+// ---------- scenes ----------
+const scenes = [[], [], [], []];
+let cur = null;
+const creaseMat = new THREE.MeshBasicMaterial({ color: 0x14100c, transparent: true, opacity: 0, depthWrite: false });
+function S(i, fn) { const before = rig.children.length; fn(); const added = rig.children.slice(before); added.forEach((o, j) => {
+  const p = new THREE.Group(); p.position.set(o.position.x, G, o.position.z); o.position.set(0, o.position.y - G, 0); rig.add(p); p.add(o);
+  const box = new THREE.Box3().setFromObject(o); const sz = box.getSize(new THREE.Vector3());
+  const cr = new THREE.Mesh(new THREE.CircleGeometry(0.5, 18), creaseMat.clone()); cr.rotation.x = -Math.PI / 2; cr.position.set(0, 0.012, -Math.max(0.2, sz.y * 0.35)); cr.scale.set(Math.max(0.5, sz.x * 0.9), Math.max(0.4, sz.y * 0.8), 1); cr.castShadow = false; cr.receiveShadow = false; p.add(cr);
+  p.userData.crease = cr; p.userData.anim = { from: 0, to: 0, t0: -1, delay: j * 0.05, cur: 0 }; p.visible = false; scenes[i].push(p); }); }
+
+S(1, () => { // Tokyo
+  box(4.4, 0.16, 0.7, 0x8C8C96, 0, G + 0.08, -1.55);
+  [-2.0, -0.7, 0.7, 2.0].forEach(x => cyl(0.03, 0.03, 1.0, 6, 0x9A9AA6, x, G + 0.66, -1.75));
+  box(4.6, 0.06, 0.95, 0x1F2A5C, 0, G + 1.18, -1.6);
+  const rails = grp(0, G, -0.75); [-0.12, 0.12].forEach(dz => box(5.2, 0.04, 0.04, 0x55555E, 0, 0.03, dz, rails)); for (let x = -2.5; x <= 2.5; x += 0.35) box(0.08, 0.02, 0.36, 0x6B4A2B, x, 0.01, 0, rails);
+  const train = grp(0.3, G + 0.34, -0.75); box(2.8, 0.5, 0.46, 0xEDEEF2, 0, 0, 0, train); box(2.82, 0.09, 0.48, 0x2F8F5B, 0, -0.14, 0, train); for (let i = -1.1; i <= 1.1; i += 0.44) box(0.3, 0.18, 0.5, 0x2A2F45, i, 0.07, 0, train); box(0.2, 0.44, 0.4, 0x2A2F45, 1.41, 0, 0, train);
+  house({ x: -1.7, z: 0.3, w: 1.0, d: 0.8, h: 0.55, roof: 0xC8412B, type: 'gable', rh: 0.4 });
+  house({ x: -0.5, z: 0.45, w: 0.9, d: 0.7, h: 0.5, roof: 0x1F2A5C, rh: 0.42 });
+  house({ x: 0.65, z: 0.4, w: 0.8, d: 0.7, h: 0.5, wall: 0xE9D8B8, roof: 0x9A3A2E, type: 'gable', rh: 0.38 });
+  const b1 = box(0.9, 1.7, 0.9, 0x2E3A6B, 1.75, G + 0.85, -0.25); for (let y = 0.3; y < 1.6; y += 0.3) for (let x = -0.28; x <= 0.28; x += 0.28) box(0.14, 0.14, 0.02, 0xE8B84A, x, y - 0.85, 0.46, b1);
+  box(0.6, 1.15, 0.6, 0x39456F, 2.35, G + 0.575, 0.55);
+  const tw = grp(2.05, G, 1.45); cyl(0.3, 0.5, 0.6, 4, 0xC8412B, 0, 0.3, 0, tw); cyl(0.2, 0.3, 0.45, 4, 0xF4EFE6, 0, 0.82, 0, tw); cyl(0.1, 0.2, 0.45, 4, 0xC8412B, 0, 1.27, 0, tw); cyl(0.02, 0.05, 0.5, 4, 0xF4EFE6, 0, 1.75, 0, tw);
+  const street = path([[-2.4, 1.0], [-1.0, 1.0], [0.6, 1.0], [1.6, 1.05]], 0.22, 0xCDBD9E);
+  [-1.9, -1.2, -0.5, 0.2, 0.9].forEach(x => lantern(x, 0.85, 0.6));
+  maple(-2.3, 1.55, 0.9, 0xF2C1C6); maple(1.2, 1.7, 0.8, 0xF6CFD2); maple(-0.3, 2.0, 0.7, 0xF2C1C6);
+  terrace(0.55, 0.04, 0x4661A3, G, -1.35, 2.05, { n: 7, rough: 0.5 }); bridge(-1.35, 2.05, 0.5, 0.78);
+});
+
+S(0, () => { // Kyoto
+  torii(0, -2.0, 1.0);
+  path([[0, -2.5], [0, -1.6], [0.1, -1.0], [0.1, -0.6]], 0.2);
+  box(2.3, 0.1, 1.75, 0x8A6A3D, 0.1, G + 0.05, 0.25);
+  house({ x: 0.1, z: 0.25, w: 1.9, d: 1.35, h: 0.7, roof: 0x2C3557, rh: 0.6, ov: 0.42, tier: true });
+  box(0.7, 0.06, 0.25, 0xC9C1B2, 0.1, G + 0.03, -0.72); box(0.6, 0.06, 0.18, 0xC9C1B2, 0.1, G + 0.09, -0.62);
+  stoneLantern(-1.3, -0.75); stoneLantern(1.5, -0.75);
+  maple(-2.05, 0.35, 1.05); maple(2.15, 0.95, 0.95, 0xD1553A); maple(-1.55, 1.75, 0.75, 0xE0633F);
+  pine(-1.95, -1.55, 0.95); pine(1.85, -1.75, 0.85); pine(-0.95, 2.15, 0.7);
+  terrace(0.85, 0.04, 0x4661A3, G, 1.0, 1.8, { n: 8, rough: 0.5 }); bridge(1.0, 1.8, 0.45, 1.05);
+  moss(-1.15, 1.2, 0.4); moss(0.2, 1.9, 0.3, 0x8FA36A); rock(-0.6, 1.5, 0.9);
+});
+
+S(2, () => { // Nakasendō
+  mountain(-1.45, -1.3, 1.65, 2.5, 0x2F4736); mountain(0.7, -1.75, 1.35, 1.95, 0x4F6B55); mountain(1.95, -0.55, 1.0, 1.45, 0x3F5A46);
+  const wf = box(0.16, 1.1, 0.06, 0xEAF2F8, -1.45, G + 0.6, 0.22); wf.rotation.x = 0.32; wf.material = new THREE.MeshStandardMaterial({ color: 0xEAF2F8, emissive: 0x9fc4ff, emissiveIntensity: 0.15, roughness: 0.4 });
+  terrace(0.45, 0.04, 0x4661A3, G, -1.45, 0.85, { n: 7, rough: 0.5 });
+  path([[2.4, 2.25], [1.5, 1.45], [0.4, 1.25], [-0.55, 0.7], [-1.55, 1.05], [-2.35, 0.3]], 0.17);
+  house({ x: -0.35, z: -0.05, w: 1.4, d: 1.0, h: 0.5, wall: 0xE8D9BC, roof: 0x6B4A2B, rh: 0.8, ov: 0.36 });
+  house({ x: 1.05, z: 0.45, w: 0.9, d: 0.7, h: 0.45, roof: 0x7A5A3A, type: 'gable', rh: 0.42 });
+  pine(2.05, 1.65, 0.85); pine(-2.25, 1.65, 0.95); pine(0.25, 2.25, 0.65); pine(-1.1, 2.05, 0.75); pine(-2.4, -0.4, 0.7);
+  const sp = grp(1.5, G, 1.05); cyl(0.03, 0.03, 0.6, 5, 0x8A6A3D, 0, 0.3, 0, sp); box(0.28, 0.12, 0.03, 0xE8D9BC, 0, 0.5, 0, sp);
+  lantern(0.45, 0.6, 0.5); rock(0.8, 1.9, 0.8);
+});
+
+let crane = null, craneRig = null, wingL = null, wingR = null;
+S(3, () => { // Your Japan
+  moss(-0.4, -0.45, 0.55, 0x8FA36A);
+  const cup = grp(-0.95, G, 1.05); cyl(0.78, 0.78, 0.06, 24, 0xD4BF96, 0, 0.03, 0, cup, true);
+  const pts = [new THREE.Vector2(0, 0), new THREE.Vector2(0.36, 0), new THREE.Vector2(0.42, 0.08), new THREE.Vector2(0.5, 0.36), new THREE.Vector2(0.52, 0.5), new THREE.Vector2(0.47, 0.5), new THREE.Vector2(0.45, 0.38), new THREE.Vector2(0.35, 0.1), new THREE.Vector2(0, 0.1)];
+  mesh(new THREE.LatheGeometry(pts, 28), M(0xF4EFE6, { flatShading: false, roughness: 0.55 }), 0, 0.06, 0, cup);
+  mesh(new THREE.CircleGeometry(0.44, 28), M(0x5E7A6A, { flatShading: false, roughness: 0.3 }), 0, 0.5, 0, cup).rotation.x = -Math.PI / 2;
+  pagoda(1.9, -0.55, 0.95);
+  for (let i = 0; i < 6; i++) cyl(0.17, 0.17, 0.04, 8, 0xD4BF96, -0.4 + i * 0.42, G + 0.02, 0.7 - i * 0.24);
+  pine(-1.95, -1.25, 0.9); pine(2.25, 1.35, 0.7); maple(-2.05, 1.65, 0.85); maple(1.05, 1.85, 0.75, 0xF2C1C6);
+  lantern(-0.2, -1.65, 0.55); lantern(2.0, 0.35, 0.55);
+});
+{ // origami crane — global flyer
+  craneRig = grp(-0.9, G + 2.0, 1.0); crane = grp(0, 0, 0, craneRig); crane.rotation.y = -Math.PI / 2; crane.scale.setScalar(0.52); craneRig.rotation.order = 'YXZ';
+  const V = 0xC8412B, V2 = 0xE0633F, V3 = 0xA53420;
+  const seg = (a, b, rt, rb, c) => { const d = new THREE.Vector3(b[0] - a[0], b[1] - a[1], 0); const L = d.length(); const m = cyl(rt, rb, L, 4, c, (a[0] + b[0]) / 2, (a[1] + b[1]) / 2, 0, crane); m.rotation.z = -Math.atan2(d.x, d.y); return m; };
+  const body = mesh(new THREE.OctahedronGeometry(1, 0), M(V), 0, 0, 0, crane); body.scale.set(1.0, 0.38, 0.3);
+  seg([0.95, 0, 0], [1.7, 0.95, 0], 0.05, 0.15, V2);
+  seg([1.7, 0.95, 0], [2.2, 0.8, 0], 0.03, 0.1, V3);
+  seg([2.2, 0.8, 0], [2.5, 0.72, 0], 0.004, 0.04, 0xC9A227);
+  seg([-0.95, 0, 0], [-1.9, 0.8, 0], 0.02, 0.17, V3);
+  const wing = (dir) => { const s = new THREE.Shape([new THREE.Vector2(-0.55, 0), new THREE.Vector2(0.5, 0), new THREE.Vector2(0.2, 1.9), new THREE.Vector2(-0.1, 1.75)]); const g = new THREE.ExtrudeGeometry(s, { depth: 0.035, bevelEnabled: false }); g.rotateX(dir * Math.PI / 2); return g; };
+  wingL = grp(0, 0.1, 0.12, crane); mesh(wing(1), M(V2), 0, 0, 0, wingL); wingL.rotation.x = -0.32;
+  wingR = grp(0, 0.1, -0.12, crane); mesh(wing(-1), M(V), 0, 0, 0, wingR); wingR.rotation.x = 0.32;
+}
+
+// ---------- scene switching ----------
+const T0 = performance.now(); let now = 0;
+window.__dbg = { get fl() { return { mode, wpIdx, route: route.map(v => v.toArray().map(n => +n.toFixed(2))), obs: (OBST || []).map(b => [b.min.toArray().map(n => +n.toFixed(2)), b.max.toArray().map(n => +n.toFixed(2))]), vel: vel.toArray().map(n => +n.toFixed(2)) }; }, get crane() { return craneRig && { v: craneRig.visible, p: craneRig.position.toArray().map(n => +n.toFixed(2)), r: [craneRig.rotation.x, craneRig.rotation.y, craneRig.rotation.z].map(n => +n.toFixed(2)) }; }, scenes, rig, setScene: (i) => setScene(i), get now() { return now; }, get cur() { return cur; } };
+function setScene(i, instant) { i = Math.max(0, Math.min(3, i | 0)); if (i === cur) return; cur = i;
+  scenes.forEach((objs, si) => objs.forEach((o, j) => { const a = o.userData.anim; a.from = a.cur; a.to = si === i ? 1 : 0; a.t0 = now; a.delay = si === i ? 0.25 + j * 0.06 : j * 0.02; if (instant) { a.cur = a.to; a.t0 = -1; } }));
+  settle = now + 2.2; }
+const ease = t => 1 - Math.pow(1 - t, 3);
+const easeIO = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+const clamp01 = v => Math.min(1, Math.max(0, v));
+const INTRO = !cfg.static; let introT0 = 0;
+const flight = new THREE.CatmullRomCurve3([new THREE.Vector3(7.5, G + 6.5, 6.5), new THREE.Vector3(3.5, G + 3.8, 3.0), new THREE.Vector3(0.4, G + 2.5, 0.6), new THREE.Vector3(-2.6, G + 2.9, -2.0), new THREE.Vector3(-6, G + 4.5, -5), new THREE.Vector3(-10, G + 7, -9)]);
+const HOVER = new THREE.Vector3(-0.9, G + 2.0, 1.0), AWAY = new THREE.Vector3(-10, G + 7, -9), ENTER = new THREE.Vector3(7.5, G + 5.5, 6.5);
+const tmpV = new THREE.Vector3(), lookV = new THREE.Vector3(), prevP = new THREE.Vector3();
+let cYaw = 0, cBank = 0, cPitch = 0, havePrev = false, lastTick = -1;
+const LAND_YAW = 0.85, LAND_DIR = new THREE.Vector3(Math.sin(LAND_YAW), 0, Math.cos(LAND_YAW));
+const PERCH = new THREE.Vector3(-0.4, G + 0.06 + 0.16, -0.45);
+const BEHIND = new THREE.Vector3(LAND_DIR.z, 0, -LAND_DIR.x); // away from camera
+const P = (b, l, y) => PERCH.clone().addScaledVector(BEHIND, b).addScaledVector(LAND_DIR, l).add(new THREE.Vector3(0, y, 0));
+const START = P(3.0, -2.2, 2.3);
+const angDiff = (a, b) => { let d = b - a; while (d > Math.PI) d -= 2 * Math.PI; while (d < -Math.PI) d += 2 * Math.PI; return d; };
+const smooth = (a, b, x) => { const t = clamp01((x - a) / (b - a)); return t * t * (3 - 2 * t); };
+// ---- crane flight physics ----
+const FL = { cruise: 1.9, vmax: 2.3, amax: 3.4, margin: 0.55, wpR: 0.5 };
+const vel = new THREE.Vector3(), steer = new THREE.Vector3(), des = new THREE.Vector3(), look = new THREE.Vector3(), push = new THREE.Vector3(), cB = new THREE.Vector3();
+const touchFrom = new THREE.Vector3(); let touchT = 0;
+let mode = null, route = [], wpIdx = 0, wingPhase = 0, restT = 0, yawRate = 0, OBST = null;
+function obstacles() {
+  if (OBST) return OBST;
+  rig.updateMatrixWorld(true); const inv = rig.matrixWorld.clone().invert(); OBST = [];
+  scenes[3].forEach(o => { const sc = o.scale.clone(), vis = o.visible; o.scale.set(1, 1, 1); o.visible = true; o.updateMatrixWorld(true);
+    const b = new THREE.Box3().setFromObject(o).applyMatrix4(inv); o.scale.copy(sc); o.visible = vis; o.updateMatrixWorld(true);
+    if (b.max.y - G > 0.3 && !b.isEmpty() && b.distanceToPoint(PERCH) > 0.3) OBST.push(b); });
+  return OBST;
+}
+function planLanding() {
+  const pos = craneRig.position.clone(), h = new THREE.Vector3(vel.x, 0, vel.z);
+  if (h.lengthSq() < 1e-4) h.subVectors(PERCH, pos).setY(0); h.normalize();
+  const FA2 = P(0, -1.25, 0.6), FA1 = P(0, -0.5, 0.16);
+  const A = pos.clone().addScaledVector(h, 1.1); A.y += (Math.max(G + 1.6, FA2.y + 0.6) - A.y) * 0.35;
+  const L = 0.35 * A.distanceTo(FA2) + 0.8;
+  const c1 = A.clone().addScaledVector(h, L), c2 = FA2.clone().addScaledVector(LAND_DIR, -L);
+  const bz = t => { const u = 1 - t; return A.clone().multiplyScalar(u * u * u).addScaledVector(c1, 3 * u * u * t).addScaledVector(c2, 3 * u * t * t).addScaledVector(FA2, t * t * t); };
+  route = [A, bz(0.2), bz(0.4), bz(0.6), bz(0.8), FA2, FA1, PERCH.clone()];
+  const obs = obstacles();
+  route.forEach((w, i) => { if (i < route.length - 3) w.y = Math.max(w.y, G + 0.9); if (i >= route.length - 2) return;
+    for (const b of obs) { const e = 0.45; if (w.x > b.min.x - e && w.x < b.max.x + e && w.z > b.min.z - e && w.z < b.max.z + e && w.y < b.max.y + 0.6) w.y = b.max.y + 0.6; } });
+  wpIdx = 0;
+}
+function flyStep(dt, target, arrive, final) {
+  const pos = craneRig.position; des.subVectors(target, pos); const dist = des.length();
+  const spd = arrive ? Math.min(FL.cruise, dist * (final ? 1.25 : 0.9) + (final ? 0.05 : 0.5)) : FL.cruise;
+  if (dist > 1e-5) des.multiplyScalar(spd / dist); else des.set(0, 0, 0);
+  steer.subVectors(des, vel).multiplyScalar(final ? 2.6 : 2.0);
+  // obstacle avoidance: look ahead, push away from any expanded box
+  const obs = final && dist < 0.9 ? [] : obstacles(); look.copy(pos).addScaledVector(vel, 0.7);
+  for (const b of obs) { cB.copy(look).clamp(b.min, b.max); const d = cB.distanceTo(look);
+    if (d < FL.margin) { push.subVectors(look, cB); push.y = Math.max(push.y, 0); if (push.lengthSq() < 1e-6) push.set(look.x - (b.min.x + b.max.x) / 2, 0, look.z - (b.min.z + b.max.z) / 2);
+      push.normalize().multiplyScalar((FL.margin - d) / FL.margin * 3.2); push.y += (pos.y < b.max.y + FL.margin ? 1.2 : 0) * (FL.margin - d) / FL.margin; steer.add(push); } }
+  // keep off the ground until the final approach
+  const floor = G + (final && dist < 1.4 ? 0.2 : 0.45); if (pos.y < floor) steer.y += (floor - pos.y) * 7;
+  const am = final && dist < 1 ? 1.8 : FL.amax; if (steer.length() > am) steer.setLength(am);
+  vel.addScaledVector(steer, dt); const vl = vel.length(); if (vl > FL.vmax) vel.setLength(Math.max(FL.vmax, vl - 5.5 * dt));
+  pos.addScaledVector(vel, dt); return dist;
+}
+function tick() {
+  const it = INTRO ? now - introT0 : 99;
+  BASE.forEach(m => { const e = INTRO ? ease(clamp01((it - m.userData.introDelay) / 0.9)) : 1; const sc = 0.001 + e; m.scale.set(0.72 + 0.28 * e, sc, 0.72 + 0.28 * e); m.visible = e > 0.001; });
+  scenes.forEach(objs => objs.forEach(p => { const a = p.userData.anim; if (a.t0 >= 0) { const q = clamp01((now - a.t0 - a.delay) / 0.9); a.cur = a.from + (a.to - a.from) * ease(q); if (q >= 1) a.t0 = -1; }
+    const c = a.cur; p.visible = c > 0.003; p.rotation.x = -(1 - c) * Math.PI / 2; p.scale.set(0.9 + 0.1 * c, 0.05 + 0.95 * c, 0.9 + 0.1 * c);
+    const cr = p.userData.crease; cr.material.opacity = Math.sin(c * Math.PI) * 0.42; cr.rotation.x = -Math.PI / 2 - p.rotation.x; }));
+  if (craneRig) {
+    const dt = lastTick < 0 ? 0.016 : Math.min(0.5, Math.max(0, now - lastTick)); lastTick = now; const k = sp => 1 - Math.exp(-dt * sp);
+    if (cfg.static) {
+      craneRig.visible = cur === 3; craneRig.position.copy(PERCH); craneRig.rotation.set(0, LAND_YAW, 0); wingL.rotation.x = -0.16; wingR.rotation.x = 0.16;
+    } else {
+      let landed = false, flareW = 0, climb = 0;
+      if (INTRO && it < (cur === 3 ? 1.4 : 2.0)) { craneRig.visible = false; havePrev = false; mode = null; }
+      else if (INTRO && it < 5.6 && cur !== 3) { const q = easeIO(clamp01((it - 2.0) / 3.6)); flight.getPoint(q, craneRig.position); flight.getTangent(q, vel).multiplyScalar(flight.getLength() / 3.6 * 0.9); craneRig.visible = true; mode = 'intro'; }
+      else if (cur === 3) {
+        if (!craneRig.visible) { craneRig.position.copy(START); vel.subVectors(P(2.4, -1.7, 2.0), START).setLength(FL.cruise); craneRig.visible = true; havePrev = false; mode = null; }
+        if (mode !== 'land' && mode !== 'landed' && mode !== 'touch') { mode = 'land'; planLanding(); }
+        if (mode === 'landed') { landed = true; }
+        else if (mode === 'touch') { touchT += dt; const TD = 0.5 + touchFrom.distanceTo(PERCH) * 1.1, x = clamp01(touchT / TD), u = 1 - Math.pow(1 - x, 2.2); craneRig.position.lerpVectors(touchFrom, PERCH, u); vel.multiplyScalar(1 - k(8)); flareW = 1 - smooth(0.55, 1, x); if (x >= 1) { mode = 'landed'; restT = 0; vel.set(0, 0, 0); landed = true; } }
+        else { const n = Math.ceil(dt / 0.02), h = dt / n; let dist = 0;
+          for (let i = 0; i < n; i++) { const last = wpIdx === route.length - 1, tgt = route[wpIdx];
+            dist = flyStep(h, tgt, wpIdx >= route.length - 2, last);
+            if (!last) { const passed = tmpV.subVectors(tgt, craneRig.position).dot(vel) < 0, cap = Math.max(FL.wpR, 0.8 * vel.lengthSq() / FL.amax); if (dist < cap || (passed && dist < 2.2)) wpIdx++; }
+            else if (dist < 0.6) { mode = 'touch'; touchFrom.copy(craneRig.position); touchT = 0; break; } }
+          const dP = craneRig.position.distanceTo(PERCH); flareW = wpIdx >= route.length - 2 ? smooth(1.3, 0.12, dP) : 0; }
+        if (landed) { restT += dt; craneRig.position.copy(PERCH); const x = restT / 0.35; craneRig.position.y -= 0.02 * x * Math.exp(1 - x); }
+      }
+      else if (craneRig.visible) { if (mode !== 'leave') { mode = 'leave'; if (vel.lengthSq() < 0.01) vel.set(0, 0.6, 0); }
+        const n = Math.ceil(dt / 0.02), h = dt / n; for (let i = 0; i < n; i++) flyStep(h, AWAY, false, false);
+        if (craneRig.position.distanceTo(AWAY) < 1.0) { craneRig.visible = false; mode = null; } }
+      climb = clamp01(vel.y / 0.6);
+      // wings: flap to climb or when slow, glide when descending, deep slow strokes on flare, fold when landed
+      const sp = vel.length(), slow = clamp01(1 - sp / FL.cruise);
+      if (landed) { wingL.rotation.x += (-0.16 - wingL.rotation.x) * k(2.2); wingR.rotation.x += (0.16 - wingR.rotation.x) * k(2.2); }
+      else { const effort = Math.max(climb, 0.35 * slow, 0.15) * (1 - flareW) + flareW * 0.55;
+        const freq = 2.2 + 1.8 * effort - 0.8 * flareW, amp = 0.08 + 0.38 * effort;
+        wingPhase += dt * freq; const base = 0.32 + 0.35 * flareW, f = Math.sin(wingPhase) * amp;
+        wingL.rotation.x += ((-base + f) - wingL.rotation.x) * k(14); wingR.rotation.x += ((base - f) - wingR.rotation.x) * k(14); }
+      // body attitude from real velocity: heading, bank from turn rate, pitch from climb + flare
+      if (craneRig.visible) {
+        if (landed) { cYaw += angDiff(cYaw, LAND_YAW) * k(2); cBank += (0 - cBank) * k(3); cPitch += (0 - cPitch) * k(2.5); yawRate = 0; }
+        else { const hz = Math.hypot(vel.x, vel.z);
+          const wantYaw = hz > 0.12 ? Math.atan2(vel.x, vel.z) : cYaw + angDiff(cYaw, LAND_YAW) * 0.05;
+          const yawT = wantYaw + angDiff(wantYaw, LAND_YAW) * flareW;
+          if (!havePrev) cYaw = yawT; const d = Math.max(-1.3 * dt, Math.min(1.3 * dt, angDiff(cYaw, yawT) * k(4))); cYaw += d; yawRate += ((dt > 0 ? d / dt : 0) - yawRate) * k(4);
+          cBank += (Math.max(-0.5, Math.min(0.5, -yawRate * sp * 0.45)) - cBank) * k(4);
+          const wantPitch = Math.max(-0.3, Math.min(0.3, Math.atan2(vel.y, Math.max(hz, 0.2)) * 0.7)) * (1 - flareW) + 0.34 * flareW * smooth(0.02, 0.25, craneRig.position.distanceTo(PERCH));
+          cPitch += (wantPitch - cPitch) * k(3.5); }
+        havePrev = true; craneRig.rotation.set(-cPitch, cYaw, cBank);
+      }
+    }
+  }
+}
+
+// ---------- camera / interaction ----------
+let mx = 0, my = 0, tmx = 0, tmy = 0, settle = 3; const camPos = new THREE.Vector3();
+function layout() { const w = cfg.size ? cfg.size[0] : innerWidth, h = cfg.size ? cfg.size[1] : innerHeight; renderer.setSize(w, h); camera.aspect = w / h; const dist = cfg.exp ? 21 * Math.max(1, 1000 / h) : cfg.mobile ? 21 * Math.max(1, 420 / h) : Math.min(24, Math.max(16, 19 * Math.pow(1000 / w, 0.6))); camera.position.set(Math.sin(-0.72) * dist * Math.cos(0.58), dist * Math.sin(0.58), Math.cos(-0.72) * dist * Math.cos(0.58)); camPos.copy(camera.position); camera.lookAt(0, G + 0.3, 0); if (!cfg.exp && !cfg.mobile) camera.setViewOffset(w, h, -w * 0.13, 0, w, h); else camera.clearViewOffset(); camera.updateProjectionMatrix();
+  world.position.set(0, cfg.exp ? 0.3 : cfg.mobile ? 0.2 : 0.7, 0); settle = now + 1; }
+addEventListener('resize', layout); layout();
+addEventListener('message', e => { const d = e.data || {}; if (d.type === 'kamiwa:scene') setScene(d.index); else if (d.type === 'kamiwa:mouse') { tmx = d.x; tmy = d.y; settle = now + 1.2; } else if (d.type === 'kamiwa:config') { cfg.mobile = !!d.mobile; cfg.static = !!d.static; layout(); setScene(d.scene ?? 0, !!d.static); } });
+addEventListener('mousemove', e => { tmx = (e.clientX / innerWidth - 0.5) * 2; tmy = (e.clientY / innerHeight - 0.5) * 2; settle = now + 1.2; });
+if (INTRO) { introT0 = 0; setTimeout(() => { setScene(cfg.scene); }, 1500); } else setScene(cfg.scene, true);
+if (cfg.exp) { // export sheet: one 2D canvas per scene, capturable
+  const sheet = document.createElement('div'); sheet.style.cssText = 'display:flex;flex-direction:column;gap:20px;background:transparent'; document.body.style.height = 'auto';
+  for (let i = 0; i < 4; i++) { setScene(i, true); tick(); world.rotation.set(0, 0, 0); renderer.render(scene, camera); const c = document.createElement('canvas'); c.id = 's' + i; c.width = cfg.size[0]; c.height = cfg.size[1]; c.style.cssText = `width:${cfg.size[0]}px;height:${cfg.size[1]}px;display:block`; c.getContext('2d').drawImage(renderer.domElement, 0, 0); sheet.appendChild(c); }
+  renderer.domElement.style.display = 'none'; document.body.appendChild(sheet); setScene(cfg.scene, true);
+}
+
+let lastF = 0;
+let lw = 0, lh = 0;
+function step() { lastF = performance.now(); if (!cfg.size && (innerWidth !== lw || innerHeight !== lh)) { lw = innerWidth; lh = innerHeight; if (lw > 0 && lh > 0) layout(); } now = (lastF - T0) / 1000; mx += (tmx - mx) * 0.06; my += (tmy - my) * 0.06; world.rotation.y = mx * 0.16; world.rotation.x = my * 0.05; if (INTRO) { const e = easeIO(clamp01((now - introT0) / 3.4)); camera.position.copy(camPos).multiplyScalar(1 + 0.55 * (1 - e)); camera.position.y += 7 * (1 - e); camera.lookAt(0, G + 0.3, 0); world.rotation.y += (1 - e) * 0.9; } tick(); if (!cfg.static || now < settle || crane && cur === 3) renderer.render(scene, camera); }
+function frame() { requestAnimationFrame(frame); step(); }
+frame();
+setInterval(() => { if (performance.now() - lastF > 80) step(); }, 50);
+</script>
+</body>
+</html>

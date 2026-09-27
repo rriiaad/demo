@@ -1,0 +1,58 @@
+KAMIWA JOURNEYS — PROJET PORTFOLIO UPWORK (VERSION FRANÇAISE)
+=============================================================
+
+ORDRE D'IMPORT (Upwork utilise la première image comme couverture ; gardez la 4:3 en premier)
+1. 01-couverture-upwork-1280x960.png
+2. 02-accueil-tokyo-1920x1080.png
+3. 03-monde-de-papier-1920x1080.png
+4. 04-quatre-plis-1920x1080.png
+5. 05-mobile-1920x1080.png
+6. 06-planificateur-1920x1080.png
+7. 07-toutes-les-pages-1920x1080.png
+
+TITRE DU PROJET (70 caractères max)
+Kamiwa Journeys — site d'agence de voyage Japon avec monde 3D en papier
+
+RÔLE
+Développeur web full-stack (design → front-end → parcours de réservation prêt pour une API)
+
+COMPÉTENCES (jusqu'à 10)
+React · Three.js · JavaScript · Responsive Web Design · Développement front-end ·
+Node.js · UX Design · Animation web · Landing page · Voyage
+
+DESCRIPTION DU PROJET (à coller dans « Description »)
+Kamiwa Journeys est une agence de voyages privés au Japon qui voulait un site
+donnant l'impression d'ouvrir un cadeau plié à la main, plutôt que de feuilleter
+une brochure.
+
+Ce que j'ai réalisé
+• Un hero en 3D temps réel avec three.js : quatre dioramas (Tokyo, Kyoto,
+  Nakasendō, une grue en origami qui flotte) construits en géométrie à aplats, avec
+  ombres douces et eau en papier découpé. Aucune image : tout est procédural.
+• Une scène pilotée par le scroll : le hero reste fixé sur une piste de 400vh et
+  chaque quart change la scène, le texte et le rail de navigation avec des
+  transitions en pop-up décalées. L'île s'incline avec le curseur.
+• Neuf pages responsives (accueil, destinations, fiche destination, voyages,
+  planificateur en quatre étapes, confirmation, à propos, journal, contact) issues
+  d'un seul système : deux polices, six couleurs papier, un style de bouton.
+• Un planificateur en quatre étapes (qui / saison / envies / contact) : choix de
+  saison codé par couleur, puces d'intérêts en kanji, une « feuille » récapitulative
+  qui se met à jour à chaque choix, validation du nom et de l'e-mail, et une page de
+  confirmation qui reprend la feuille. Prêt à envoyer vers n'importe quel CRM.
+• Site bilingue anglais / français avec bascule instantanée, transitions en pliage
+  entre les pages, apparitions décalées, menu mobile, et une version mobile où rien
+  n'est masqué.
+
+Stack : React, three.js, CSS, couche API prête pour Node.
+Performance : 60 fps sur ordinateur, ombres allégées sur mobile, la 3D se met en
+pause quand l'onglet est en arrière-plan.
+
+VERSION COURTE (pour les propositions, ~60 mots)
+Site pour une agence de voyage au Japon : un diorama en papier three.js temps réel
+qui se reconstruit au scroll, neuf pages responsives bilingues EN/FR et un
+planificateur en quatre étapes avec validation et confirmation. React + three.js,
+aucune image, 60 fps.
+
+LIEN EN LIGNE
+Publiez la version HTML autonome sur Netlify ou Vercel et collez l'URL dans
+« URL du projet ».

@@ -1,0 +1,55 @@
+KAMIWA JOURNEYS — UPWORK PORTFOLIO ITEM
+=======================================
+
+UPLOAD ORDER (Upwork uses the first image as the cover; keep the 4:3 one first)
+1. 01-upwork-cover-1280x960.png
+2. 02-home-tokyo-fold-1920x1080.png
+3. 03-paper-world-1920x1080.png
+4. 04-scroll-four-folds-1920x1080.png
+5. 05-mobile-1920x1080.png
+6. 06-planner-1920x1080.png
+7. 07-all-pages-1920x1080.png
+
+PROJECT TITLE (70 chars max)
+Kamiwa Journeys — Japan travel agency site with real-time 3D paper world
+
+ROLE
+Full-stack web developer (design → front end → API-ready planner flow)
+
+SKILLS TAGS (pick up to 10)
+React · Three.js · JavaScript · Responsive Web Design · Front-End Development ·
+Node.js · UX Design · Web Animation · Landing Page · Travel
+
+PROJECT DESCRIPTION (paste into "Description")
+Kamiwa Journeys is a private Japan travel agency that wanted a site that feels like
+opening a hand-folded paper gift rather than scrolling a brochure.
+
+What I built
+• A real-time 3D "paper world" hero in three.js: four dioramas (Tokyo, Kyoto,
+  Nakasendō, a floating origami crane) built from flat-shaded geometry with soft
+  shadows and paper-cut water terraces. No image assets — everything is procedural.
+• A scroll-driven stage: the hero stays pinned across a 400vh track and each quarter
+  swaps the scene, the copy and the scene rail with staggered pop-up transitions.
+  Cursor parallax tilts the island.
+• Nine responsive pages (home, destinations, destination detail, journeys, four-step
+  planner, confirmation, about, journal, contact) from one component system: two
+  typefaces, six paper colours, one button style.
+• A four-step trip planner (who / season / what pulls you / contact): colour-coded
+  season picker, kanji interest chips, a live "paper sheet" summary that re-folds with
+  every pick, name and email validation, and a confirmation page that echoes the sheet
+  back. Ready to POST to any CRM.
+• Page-fold transitions between routes, staggered reveals, mobile menu, and a
+  mobile layout where nothing is hidden — the diorama moves above the copy.
+
+Stack: React, three.js, vanilla CSS (inline design tokens), Node-ready API layer.
+Performance: 60 fps desktop, shadow maps clamped on mobile, 3D pauses when the
+tab is in the background.
+
+SHORT VERSION (for proposals, ~60 words)
+Built a Japan travel agency site with a real-time three.js paper diorama that
+rebuilds itself as you scroll, nine responsive pages and a four-step trip planner
+with validation and confirmation. React + three.js, zero image assets, 60 fps.
+
+LIVE LINK
+Publish the standalone HTML (ask me for "Kamiwa standalone") to Netlify/Vercel
+and paste the URL in "Project URL".

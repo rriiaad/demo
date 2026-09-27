@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+<meta name="ext-resource-dependency" content="assets/scene-kyoto-v2.png" data-resource-id="sceneKyoto">
+<meta name="ext-resource-dependency" content="assets/scene-tokyo-v2.png" data-resource-id="sceneTokyo">
+<meta name="ext-resource-dependency" content="assets/scene-nakasendo-v2.png" data-resource-id="sceneNakasendo">
+<meta name="ext-resource-dependency" content="assets/scene-crane-v5.png" data-resource-id="sceneCrane">
+</head>
+<body>
+<template id="__bundler_thumbnail" data-bg-color="#F6EFE3"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100"><rect width="100" height="100" fill="#F6EFE3"></rect><g transform="translate(30 32) scale(1.2)"><polygon points="14,16 20,12 24,18 16,22" fill="#C8412B"></polygon><polygon points="20,12 25,4 27,6 24,18" fill="#A53420"></polygon><polygon points="25,4 24,1 31,4 27,6" fill="#1C1917"></polygon><polygon points="14,16 4,13 12,22 16,22" fill="#E0633F"></polygon><polygon points="17,14 23,2 26,12 20,16" fill="#E8744F"></polygon><polygon points="15,18 3,26 12,16 18,16" fill="#8E2A1B"></polygon></g></svg></template>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F6EFE3;color:#1C1917;-webkit-font-smoothing:antialiased}
+a{color:#B03722;text-decoration:none}a:hover{color:#A53420}
+input,textarea{font-family:'Zen Kaku Gothic New',sans-serif}
+input:focus,textarea:focus{outline:none;border-color:#B03722!important}
+button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid #C8412B;outline-offset:3px}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+@media (pointer:fine) and (min-width:780px){body,body *{cursor:none!important}}
+@container (max-width:1179px){[data-kw="cta"]{display:none!important}}
+@container (max-width:779px){[data-kw="desk"]{display:none!important}}
+@container (min-width:780px){[data-kw="mob"]{display:none!important}}
+@keyframes rise{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
+@keyframes floatY{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+@keyframes flap{0%,100%{transform:rotate(0deg)}50%{transform:rotate(-14deg)}}
+@keyframes flap2{0%,100%{transform:rotate(0deg)}50%{transform:rotate(12deg)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</helmet>
+<div ref="{{ rootRef }}" style="min-height:100vh;background:#F6EFE3;color:#1C1917;font-family:'Zen Kaku Gothic New',sans-serif;font-size:15px;line-height:1.6;position:relative;overflow-x:clip;container-type:inline-size">
+  <div style="position:fixed;inset:0;pointer-events:none;opacity:.5;mix-blend-mode:multiply;background-image:url(&quot;data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .55 0 0 0 0 .5 0 0 0 0 .42 0 0 0 .08 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>&quot;);z-index:0"></div>
+
+  <div ref="{{ cursorRef }}" aria-hidden="true" style="position:fixed;left:0;top:0;width:12px;height:12px;background:#C8412B;border:1px solid transparent;pointer-events:none;z-index:200;opacity:0;transition:transform .18s cubic-bezier(.2,.7,.2,1),background .18s,opacity .3s;will-change:transform;mix-blend-mode:multiply"></div>
+  <a href="#main" style="position:absolute;left:12px;top:-60px;z-index:100;padding:10px 14px;background:#1C1917;color:#F6EFE3;font:700 11px/1 'Zen Kaku Gothic New',sans-serif;letter-spacing:.16em;text-transform:uppercase" style-focus="top:12px">Skip to content</a>
+  <nav aria-label="Primary" style="position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px 5cqw;background:rgba(246,239,227,.82);backdrop-filter:blur(10px);border-bottom:1px solid rgba(28,25,23,.08)">
+    <button onClick="{{ goHome }}" style="display:flex;align-items:center;gap:10px;background:none;border:0;cursor:pointer;color:#1C1917;padding:0">
+      <svg width="34" height="28" viewBox="0 0 34 28" style="overflow:visible">
+        <polygon points="14,16 20,12 24,18 16,22" fill="#C8412B"></polygon>
+        <polygon points="20,12 25,4 27,6 24,18" fill="#A53420"></polygon>
+        <polygon points="25,4 24,1 31,4 27,6" fill="#1C1917"></polygon>
+        <polygon points="14,16 4,13 12,22 16,22" fill="#E0633F"></polygon>
+        <g style="transform-origin:19px 14px;animation:flap 2.6s ease-in-out infinite"><polygon points="17,14 23,2 26,12 20,16" fill="#E8744F"></polygon></g>
+        <g style="transform-origin:16px 18px;animation:flap2 2.6s ease-in-out infinite"><polygon points="15,18 3,26 12,16 18,16" fill="#8E2A1B"></polygon></g>
+      </svg>
+      <span style="font:700 17px/1 'Shippori Mincho',serif;letter-spacing:.02em;white-space:nowrap">Kamiwa Journeys</span>
+    </button>
+    <div data-kw="desk" style="display:flex">
+      <div style="display:flex;align-items:center;gap:4px;padding:4px;background:rgba(28,25,23,.05);border-radius:2px">
+        <sc-for list="{{ navItems }}" as="n" hint-placeholder-count="4">
+          <button onClick="{{ n.go }}" style="{{ n.st }}" style-hover="background:#1C1917;color:#F6EFE3">{{ n.label }}</button>
+        </sc-for>
+      </div>
+    </div>
+    <div role="group" aria-label="Language" style="display:flex;border:1px solid rgba(28,25,23,.2);flex:none">
+      <button onClick="{{ setEn }}" style="{{ langEnSt }}">EN</button>
+      <button onClick="{{ setFr }}" style="{{ langFrSt }}">FR</button>
+    </div>
+    <div data-kw="cta" style="display:flex">
+      <button onClick="{{ goPlan }}" style="display:inline-flex;align-items:center;padding:13px 26px 13px 20px;background:#C8412B;color:#FFF6EA;font:700 11px/1 'Zen Kaku Gothic New',sans-serif;letter-spacing:.18em;text-transform:uppercase;border:0;cursor:pointer;clip-path:polygon(0 0,calc(100% - 10px) 0,100% 50%,calc(100% - 10px) 100%,0 100%);transition:background .2s;white-space:nowrap" style-hover="background:#A53420">Plan your journey</button>
+    </div>
+    <div data-kw="mob" style="display:flex">
+      <button onClick="{{ toggleMenu }}" aria-label="Menu" style="width:44px;height:44px;display:grid;place-items:center;background:none;border:1px solid rgba(28,25,23,.2);cursor:pointer;color:#1C1917">
+        <svg width="20" height="14" viewBox="0 0 20 14"><path d="M0 1h20M0 7h20M0 13h20" stroke="#1C1917" stroke-width="1.6"></path></svg>
+      </button>
+    </div>
+  </nav>
+
+  <sc-if value="{{ menu }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;inset:0;z-index:60;background:#1C1917;color:#F6EFE3;display:flex;flex-direction:column;padding:24px 6cqw;animation:rise .35s both">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <span style="font:700 17px/1 'Shippori Mincho',serif">Kamiwa Journeys</span>
+        <button onClick="{{ toggleMenu }}" style="width:44px;height:44px;background:none;border:1px solid rgba(246,239,227,.3);color:#F6EFE3;font-size:20px;cursor:pointer">×</button>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px;margin-top:48px">
+        <sc-for list="{{ menuItems }}" as="m" hint-placeholder-count="5">
+          <button onClick="{{ m.go }}" style="text-align:left;background:none;border:0;border-bottom:1px solid rgba(246,239,227,.12);padding:18px 0;color:#F6EFE3;font:500 34px/1.1 'Shippori Mincho',serif;cursor:pointer">{{ m.label }}</button>
+        </sc-for>
+      </div>
+      <button onClick="{{ goPlan }}" style="margin-top:auto;padding:18px;background:#C8412B;color:#FFF6EA;font:700 12px/1 'Zen Kaku Gothic New',sans-serif;letter-spacing:.18em;text-transform:uppercase;border:0;cursor:pointer">Plan your journey</button>
+    </div>
+  </sc-if>
+
+  <main id="main" style="{{ pageStyle }}">
+
+  <!-- ============ HOME ============ -->
+  <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+    <div ref="{{ trackRef }}" style="height:400vh;position:relative;z-index:1;margin-top:-81px">
+      <section ref="{{ heroRef }}" data-screen-label="Home hero" style="position:sticky;top:0;height:100vh;min-height:520px;overflow:hidden">
+        <div style="{{ heroMediaStyle }}"><sc-if value="{{ useFrame }}" hint-placeholder-val="{{ true }}"><iframe ref="{{ frameRef }}" title="Paper diorama of Japan" aria-hidden="true" tabIndex="{{ minusOne }}" style="position:absolute;inset:0;width:100%;height:100%;border:0;background:transparent;pointer-events:none"></iframe></sc-if>
+        <sc-if value="{{ useImage }}" hint-placeholder-val="{{ false }}"><sc-for list="{{ sceneImages }}" as="im" hint-placeholder-count="0"><div role="img" aria-label="Paper diorama of Japan" style="{{ im.st }}"></div></sc-for></sc-if></div>
+        <div style="{{ heroTextStyle }}"><div style="{{ heroVeilStyle }}"></div>
+          <sc-for list="{{ heroTexts }}" as="s" hint-placeholder-count="1">
+            <div style="{{ s.st }}" aria-hidden="{{ s.hidden }}">
+              <div style="display:flex;align-items:center;gap:12px;font:500 10px/1 'Zen Kaku Gothic New',sans-serif;letter-spacing:.2em;color:#6F645A"><span style="display:block;width:28px;height:1px;background:#C8412B"></span>{{ s.idx }}</div>
+              <div style="margin-top:12px;font:700 10px/1 'Zen Kaku Gothic New',sans-serif;letter-spacing:.22em;color:#B03722">{{ s.eyebrow }}</div>
+              <h1 style="margin:12px 0 0;font:400 clamp(30px,4.6cqw,64px)/1.02 'Shippori Mincho',serif;letter-spacing:-.01em;text-wrap:balance">{{ s.title }}</h1>
+              <p style="margin:14px 0 0;max-width:360px;color:#4A433D;font-size:clamp(12.5px,1cqw,14px);text-wrap:pretty">{{ s.body }}</p>
+              <div style="display:flex;gap:18px;margin-top:16px;font:700 9.5px/1 'Zen Kaku Gothic New',sans-serif;letter-spacing:.2em;text-transform:uppercase;color:#1C1917;flex-wrap:wrap"><span style="white-space:nowrap">{{ s.tag1 }}</span><span style="white-space:nowrap">{{ s.tag2 }}</span></div>
+              <div style="display:flex;gap:10px;margin-top:22px;flex-wrap:wrap">
+                <button onClick="{{ goPlan }}" style="display:inline-flex;align-items:center;padding:14px 28px 14px 22px;background:#C8412B;color:#FFF6EA;font:700 11px/1 'Zen Kaku Gothic New',sans-serif;letter-spacing:.18em;text-transform:uppercase;border:0;cursor:pointer;clip-path:polygon(0 0,calc(100% - 10px) 0,100% 50%,calc(100% - 10px) 100%,0 100%);transition:background .2s;white-space:nowrap;flex:none" style-hover="background:#A53420">Begin your journey</button>
+                <button onClick="{{ s.next }}" style="padding:13px 22px;background:transparent;border:1px solid rgba(28,25,23,.25);color:#1C1917;font:700 11px/1 'Zen Kaku Gothic New',sans-serif;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;transition:all .2s;white-space:nowrap" style-hover="background:#1C1917;color:#F6EFE3">{{ s.nextLabel }}</button>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+        <div style="{{ railStyle }}">
+          <sc-for list="{{ heroTexts }}" as="s" hint-placeholder-count="4">
+            <button onClick="{{ s.go }}" style="{{ s.dot }}"><span style="{{ s.dotLabel }}">{{ s.name }}</span><span style="{{ s.dotMark }}"></span></button>
+          </sc-for>
+        </div>
+        <div style="position:absolute;left:0;right:0;bottom:0;height:3px;background:rgba(28,25,23,.08)"><div ref="{{ progRef }}" style="height:100%;width:100%;background:#C8412B;transform-origin:left center;transform:scaleX(0);will-change:transform"></div></div>
+      </section>
+    </div>
+
+    <section data-screen-label="Home how" style="position:relative;z-index:1;padding:110px 5cqw 90px;background:#F6EFE3">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:48px;align-items:end;max-width:1240px;margin:0 auto">
+        <div>
+          <div style="font:700 10px/1 'Zen Kaku Gothic New',sans-serif;letter-spacing:.22em;color:#B03722">HOW WE FOLD A JOURNEY</div>
+          <h2 style="margin:16px 0 0;font:400 clamp(32px,3.6cqw,48px)/1.08 'Shippori Mincho',serif;text-wrap:balance">One sheet of paper. Every crease is yours.</h2>
+        </div>
+        <p style="margin:0;color:#5A524B;max-width:460px;text-wrap:pretty">No two travellers want the same Japan. We start with a blank sheet, listen for what pulls you, and fold the trip around it: the pace, the people you meet, the mornings left open.</p>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:2px;margin:64px auto 0;max-width:1240px;background:rgba(28,25,23,.1)">
+        <sc-for list="{{ steps }}" as="st" hint-placeholder-count="3">
+          <div style="background:#F6EFE3;padding:36px 32px 40px;transition:background .3s" style-hover="background:#EFE4D0">
+            <div style="font:400 44px/1 'Shippori Mincho',serif;color:#B03722">{{ st.num }}</div>
+            <h3 style="margin:22px 0 0;font:500 22px/1.2 'Shippori Mincho',serif">{{ st.title }}</h3>
+            <p style="margin:12px 0 0;color:#5A524B;font-size:14px;text-wrap:pretty">{{ st.body }}</p>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+
+    <section data-screen-label="Home journeys" style="position:relative;z-index:1;padding:90px 5cqw;background:#EFE4D0">
+      <div style="max-width:1240px;margin:0 auto">
+        <div style="display:flex;justify-content:space-between;align-items:end;gap:24px;flex-wrap:wrap">
+          <div>
+            <div style="font:700 10px/1 'Zen Kaku Gothic New',sans-serif;letter-spacing:.22em;color:#B03722">THREE WAYS TO BEGIN</div>
+            <h2 style="margin:16px 0 0;font:400 clamp(32px,3.6cqw,48px)/1.08 'Shippori Mincho',serif">Journeys we love to shape</h2>
+          </div>
+          <button onClick="{{ goJourneys }}" style="background:none;border:0;border-bottom:1px solid #1C1917;padding:0 0 4px;font:700 11px/1 'Zen Kaku Gothic New',sans-serif;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;color:#1C1917">All journeys →</button>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:24px;margin-top:48px">
+          <sc-for list="{{ packages }}" as="p" hint-placeholder-count="3">
+            <button onClick="{{ p.go }}" style="text-align:left;background:#F6EFE3;border:0;padding:0;cursor:pointer;color:#1C1917;font-family:inherit;transition:transform .35s cubic-bezier(.2,.7,.2,1),box-shadow .35s;display:flex;flex-direction:column" style-hover="transform:translateY(-8px);box-shadow:0 30px 44px -26px rgba(28,25,23,.45)">
+              <div style="{{ p.band }}"><span style="font:400 110px/1 'Shippori Mincho',serif;color:rgba(255,255,255,.9)">{{ p.kanji }}</span><span style="position:absolute;left:24px;top:22px;font:700 10px/1 'Zen Kaku Gothic New',sans-serif;letter-spacing:.2em;color:rgba(255,255,255,.85)">{{ p.dur }}</span></div>
+              <div style="padding:26px 26px 30px">
+                <div style="font:700 10px/1 'Zen Kaku Gothic New',sans-serif;letter-spacing:.2em;color:#6F645A;text-transform:uppercase">{{ p.for }}</div>
+                <h3 style="margin:10px 0 0;font:500 26px/1.15 'Shippori Mincho',serif">{{ p.name }}</h3>
+                <div style="margin-top:10px;font-size:13px;color:#5A524B">{{ p.route }}</div>
+              </div>
+            </button>
+          </sc-for>
+        </div>
+      </div>
+    </section>
+
+    <section data-screen-label="Home quote" style="position:relative;z-index:1;padding:120px 5cqw;background:#1F2A5C;color:#F6EFE3;overflow:hidden">
+      <div style="position:absolute;right:-40px;top:-60px;font:400 420px/1 'Shippori Mincho',serif;color:rgba(246,239,227,.05);pointer-events:none;user-select:none">紙</div>
+      <div style="max-width:900px;margin:0 auto;text-align:center;position:relative">
+        <div style="font:700 10px/1 'Zen Kaku Gothic New',sans-serif;letter-spacing:.22em;color:#E8B84A">FROM A TRAVELLER</div>
+        <p style="margin:26px 0 0;font:400 clamp(26px,3cqw,40px)/1.3 'Shippori Mincho',serif;text-wrap:balance">“We told Aiko we wanted quiet. She gave us a temple at six in the morning, a tea master who talked about rain, and an afternoon with nothing in it. It was the best day of the trip.”</p>
+        <div style="margin-top:28px;font-size:13px;letter-spacing:.1em;color:rgba(246,239,227,.7)">MARA &amp; JONAS · HONEYMOON, OCTOBER</div>
+      </div>
+    </section>
+
+    <section data-screen-label="Home CTA" style="position:relative;z-index:1;padding:110px 5cqw;background:#F6EFE3;text-align:center">
+      <h2 style="margin:0;font:400 clamp(36px,5cqw,72px)/1.02 'Shippori Mincho',serif;text-wrap:balance">Ready to fold?</h2>
+      <p style="margin:20px auto 0;max-width:460px;color:#5A524B;text-wrap:pretty">Tell us who is travelling and what pulls you. We reply within two days with a first sketch of your journey.</p>
+      <div style="display:flex;justify-content:center;gap:12px;margin-top:36px;flex-wrap:wrap">
+        <button onClick="{{ goPlan }}" style="display:inline-flex;align-items:center;padding:16px 32px 16px 24px;background:#C8412B;color:#FFF6EA;font:700 11px/1 'Zen Kaku Gothic New',sans-serif;letter-spacing:.18em;text-transform:uppercase;border:0;cursor:pointer;clip-path:polygon(0 0,calc(100% - 10px) 0,100% 50%,calc(100% - 10px) 100%,0 100%);transition:background .2s" style-hover="background:#A53420">Plan your journey</button>
+        <button onClick="{{ goDestinations }}" style="padding:15px 24px;background:transparent;border:1px solid rgba(28,25,23,.25);color:#1C1917;font:700 11px/1 'Zen Kaku Gothic New',sans-serif;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;transition:all .2s" style-hover="background:#1C1917;color:#F6EFE3">Browse destinations</button>
+      </div>
+    </section>
+  </sc-if>
+
+  <!-- ============ DESTINATIONS ============ -->
+  <sc-if value="{{ isDestinations }}" hint-placeholder-val="{{ false }}">
+    <section data-screen-label="Destinations" style="position:relative;z-index:1;padding:80px 5cqw 110px;max-width:1240px;margin:0 auto;animation:{{ riseAnim }}">
+      <div style="font:700 10px/1 'Zen Kaku Gothic New',sans-serif;letter-spacing:.22em;color:#B03722">DESTINATIONS</div>
+      <h1 style="margin:16px 0 0;font:400 clamp(40px,5cqw,72px)/1.02 'Shippori Mincho',serif;text-wrap:balance;max-width:800px">Six places we keep going back to.</h1>
+      <p style="margin:22px 0 0;max-width:520px;color:#5A524B;text-wrap:pretty">Not a list of everything. These are the places where we know the innkeepers by name, and where a private day feels different from the guidebook one.</p>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:22px;margin-top:64px">
+        <sc-for list="{{ destinations }}" as="d" hint-placeholder-count="6">
+          <button onClick="{{ d.go }}" style="text-align:left;position:relative;border:0;padding:0;cursor:pointer;color:#1C1917;font-family:inherit;background:#F6EFE3;transition:transform .35s cubic-bezier(.2,.7,.2,1),box-shadow .35s;display:flex;flex-direction:column;animation:{{ riseAnim2 }}" style-hover="transform:translateY(-8px);box-shadow:0 30px 44px -26px rgba(28,25,23,.45)">
+            <div style="{{ d.band }}">
+              <span style="font:400 120px/1 'Shippori Mincho',serif;color:rgba(255,255,255,.92);letter-spacing:-.04em">{{ d.kanji }}</span>
+              <span style="position:absolute;left:22px;top:20px;font:700 10px/1 'Zen Kaku Gothic New',sans-serif;letter-spacing:.2em;color:rgba(255,255,255,.85)">{{ d.region }}</span>
+              <span style="position:absolute;right:22px;bottom:18px;font:700 10px/1 'Zen Kaku Gothic New',sans-serif;letter-spacing:.2em;color:rgba(255,255,255,.85)">{{ d.nights }}</span>
+            </div>
+            <div style="padding:24px 24px 28px;border:1px solid rgba(28,25,23,.1);border-top:0;flex:1">
+              <h3 style="margin:0;font:500 28px/1.1 'Shippori Mincho',serif">{{ d.name }}</h3>
+              <p style="margin:10px 0 0;color:#5A524B;font-size:14px">{{ d.line }}</p>
+            </div>
+          </button>
+        </sc-for>
+      </div>
+    </section>
+  </sc-if>
+
+  <!-- ============ DESTINATION DETAIL ============ -->
+  <sc-if value="{{ isDetail }}" hint-placeholder-val="{{ false }}">
+    <section data-screen-label="Destination detail" style="position:relative;z-index:1;animation:{{ riseAnim }}">
+      <div style="{{ detail.hero }}">
+        <div style="position:absolute;right:-2cqw;bottom:-10%;font:400 clamp(220px,34cqw,480px)/1 'Shippori Mincho',serif;color:rgba(255,255,255,.14);letter-spacing:-.06em;pointer-events:none;user-select:none">{{ detail.kanji }}</div>
+        <div style="position:relative;max-width:1240px;margin:0 auto;padding:90px 5cqw 80px">
+          <button onClick="{{ goDestinations }}" style="background:none;border:0;padding:0;color:rgba(255,255,255,.8);font:700 10px/1 'Zen Kaku Gothic New',sans-serif;letter-spacing:.2em;cursor:pointer">← ALL DESTINATIONS</button>
+          <div style="margin-top:40px;font:700 10px/1 'Zen Kaku Gothic New',sans-serif;letter-spacing:.22em;color:rgba(255,255,255,.75)">{{ detail.region }} · {{ detail.nights }}</div>
+          <h1 style="margin:14px 0 0;font:400 clamp(48px,7cqw,104px)/1 'Shippori Mincho',serif;color:#FFF6EA">{{ detail.name }}</h1>
+          <p style="margin:24px 0 0;max-width:520px;color:rgba(255,255,255,.88);font-size:17px;text-wrap:pretty">{{ detail.intro }}</p>
+        </div>
+      </div>
+      <div style="max-width:1240px;margin:0 auto;padding:80px 5cqw 100px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:56px">
+        <div>
+          <div style="font:700 10px/1 'Zen Kaku Gothic New',sans-serif;letter-spacing:.22em;color:#B03722">HOW WE SPEND THE DAYS</div>
+          <div style="margin-top:28px;display:flex;flex-direction:column">
+            <sc-for list="{{ detail.days }}" as="dy" hint-placeholder-count="3">
+              <div style="display:grid;grid-template-columns:64px 1fr;gap:20px;padding:26px 0;border-top:1px solid rgba(28,25,23,.12)">
+                <div style="font:400 34px/1 'Shippori Mincho',serif;color:#B03722">{{ dy.n }}</div>
+                <div><h3 style="margin:0;font:500 22px/1.2 'Shippori Mincho',serif">{{ dy.t }}</h3><p style="margin:8px 0 0;color:#5A524B;font-size:14px;text-wrap:pretty">{{ dy.b }}</p></div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:22px">
+          <div style="background:#EFE4D0;padding:32px">
+            <div style="font:700 10px/1 'Zen Kaku Gothic New',sans-serif;letter-spacing:.22em;color:#6F645A">WHERE YOU STAY</div>
+            <h3 style="margin:14px 0 0;font:500 24px/1.2 'Shippori Mincho',serif">{{ detail.stayName }}</h3>
+            <p style="margin:10px 0 0;color:#5A524B;font-size:14px;text-wrap:pretty">{{ detail.stay }}</p>
+          </div>
+          <div style="background:#EFE4D0;padding:32px">
+            <div style="font:700 10px/1 'Zen Kaku Gothic New',sans-serif;letter-spacing:.22em;color:#6F645A">BEST SEASON</div>
+            <h3 style="margin:14px 0 0;font:500 24px/1.2 'Shippori Mincho',serif">{{ detail.season }}</h3>
+            <p style="margin:10px 0 0;color:#5A524B;font-size:14px;text-wrap:pretty">{{ detail.seasonNote }}</p>
+          </div>
+          <button onClick="{{ goPlan }}" style="display:inline-flex;align-items:center;justify-content:center;padding:18px 28px;background:#C8412B;color:#FFF6EA;font:700 11px/1 'Zen Kaku Gothic New',sans-serif;letter-spacing:.18em;text-transform:uppercase;border:0;cursor:pointer;transition:background .2s" style-hover="background:#A53420">Fold {{ detail.name }} into my journey</button>
+        </div>
+      </div>
+    </section>
+  </sc-if>
+
+  <!-- ============ JOURNEYS ============ -->
+  <sc-if value="{{ isJourneys }}" hint-placeholder-val="{{ false }}">
+    <section data-screen-label="Journeys" style="position:relative;z-index:1;padding:80px 5cqw 110px;max-width:1240px;margin:0 auto;animation:{{ riseAnim }}">
+      <div style="font:700 10px/1 'Zen Kaku Gothic New',sans-serif;letter-spacing:.22em;color:#B03722">JOURNEYS</div>
+      <h1 style="margin:16px 0 0;font:400 clamp(40px,5cqw,72px)/1.02 'Shippori Mincho',serif;text-wrap:balance;max-width:820px">Three starting folds. None of them final.</h1>
+      <p style="margin:22px 0 0;max-width:540px;color:#5A524B;text-wrap:pretty">Each journey below is a shape we have refined over years. Treat it as a first crease: every one is reworked around who you are before we send a plan. Pricing follows the plan, never the other way round.</p>
+      <div style="display:flex;flex-direction:column;gap:2px;margin-top:64px;background:rgba(28,25,23,.1)">
+        <sc-for list="{{ packages }}" as="p" hint-placeholder-count="3">
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:40px;background:#F6EFE3;padding:44px 40px;transition:background .3s" style-hover="background:#EFE4D0">
+            <div style="display:flex;gap:28px;align-items:flex-start">
+              <div style="{{ p.tile }}">{{ p.kanji }}</div>
+              <div>
+                <div style="font:700 10px/1 'Zen Kaku Gothic New',sans-serif;letter-spacing:.2em;color:#6F645A;text-transform:uppercase">{{ p.for }} · {{ p.dur }}</div>
+                <h2 style="margin:10px 0 0;font:500 34px/1.1 'Shippori Mincho',serif">{{ p.name }}</h2>
+                <div style="margin-top:10px;font-size:14px;color:#B03722;font-weight:500">{{ p.route }}</div>
+                <p style="margin:14px 0 0;color:#5A524B;font-size:14px;max-width:420px;text-wrap:pretty">{{ p.blurb }}</p>
+              </div>
+            </div>
+            <div style="display:flex;flex-direction:column;justify-content:space-between;gap:24px">
+              <ul style="margin:0;padding:0;list-style:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px 24px;font-size:13.5px;color:#1C1917">
+                <sc-for list="{{ p.inc }}" as="i" hint-placeholder-count="4"><li style="display:flex;gap:10px;align-items:flex-start"><span style="width:6px;height:6px;margin-top:8px;background:#C8412B;transform:rotate(45deg);flex:none"></span>{{ i }}</li></sc-for>
+              </ul>
+              <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center">
+                <button onClick="{{ p.enquire }}" style="display:inline-flex;align-items:center;padding:14px 28px 14px 22px;background:#C8412B;color:#FFF6EA;font:700 11px/1 'Zen Kaku Gothic New',sans-serif;letter-spacing:.18em;text-transform:uppercase;border:0;cursor:pointer;clip-path:polygon(0 0,calc(100% - 10px) 0,100% 50%,calc(100% - 10px) 100%,0 100%);transition:background .2s" style-hover="background:#A53420">Enquire</button>
+                <span style="font-size:12.5px;color:#6F645A">Private journey · quote after a short call</span>
+              </div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+  </sc-if>
+
+  <!-- ============ PLAN ============ -->
+  <sc-if value="{{ isPlan }}" hint-placeholder-val="{{ false }}">
+    <section data-screen-label="Plan your journey" style="position:relative;z-index:1;padding:70px 5cqw 110px;max-width:1240px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:64px;animation:{{ riseAnim }}">
+      <div>
+        <div style="font:700 10px/1 'Zen Kaku Gothic New',sans-serif;letter-spacing:.22em;color:#B03722">PLAN YOUR JOURNEY</div>
+        <h1 style="margin:16px 0 0;font:400 clamp(36px,4cqw,60px)/1.05 'Shippori Mincho',serif;text-wrap:balance">{{ stepTitle }}</h1>
+        <p style="margin:18px 0 0;color:#5A524B;max-width:400px;text-wrap:pretty">{{ stepBody }}</p>
+        <div style="display:flex;flex-direction:column;gap:0;margin-top:36px;max-width:360px">
+          <sc-for list="{{ stepList }}" as="s" hint-placeholder-count="4">
+            <button onClick="{{ s.go }}" style="{{ s.st }}"><span style="{{ s.numSt }}">{{ s.num }}</span><span>{{ s.label }}</span><span style="{{ s.check }}">✓</span></button>
+          </sc-for>
+        </div>
+        <div style="margin-top:36px;max-width:360px;background:#FBF7EF;border:1px solid rgba(28,25,23,.12);box-shadow:0 24px 40px -28px rgba(28,25,23,.4);position:relative">
+          <div style="{{ sheetBand }}">
+            <span style="font:400 40px/1 'Shippori Mincho',serif">{{ sheetWhoKanji }}</span>
+            <span style="text-align:right;font:700 9.5px/1.6 'Zen Kaku Gothic New',sans-serif;letter-spacing:.2em">YOUR SHEET<br>{{ sheetSeasonName }}</span>
+          </div>
+          <div style="position:absolute;left:-7px;top:62px;width:12px;height:12px;border-radius:50%;background:#F6EFE3;border-right:1px solid rgba(28,25,23,.12)"></div>
+          <div style="position:absolute;right:-7px;top:62px;width:12px;height:12px;border-radius:50%;background:#F6EFE3;border-left:1px solid rgba(28,25,23,.12)"></div>
+          <div style="padding:18px 22px 20px;display:grid;grid-template-columns:1fr 1fr;gap:14px 20px;border-top:1px dashed rgba(28,25,23,.25)">
+            <div><div style="font:700 9px/1 'Zen Kaku Gothic New',sans-serif;letter-spacing:.2em;color:#8A7E72">WHO</div><div style="margin-top:6px;font:500 16px/1.2 'Shippori Mincho',serif">{{ plan.who }}</div></div>
+            <div><div style="font:700 9px/1 'Zen Kaku Gothic New',sans-serif;letter-spacing:.2em;color:#8A7E72">WHEN</div><div style="margin-top:6px;font:500 16px/1.2 'Shippori Mincho',serif">{{ plan.month }} · {{ plan.days }}</div></div>
+            <div><div style="font:700 9px/1 'Zen Kaku Gothic New',sans-serif;letter-spacing:.2em;color:#8A7E72">PULLS</div><div style="margin-top:6px;font:500 16px/1.2 'Shippori Mincho',serif">{{ sheetPulls }}</div></div>
+            <div><div style="font:700 9px/1 'Zen Kaku Gothic New',sans-serif;letter-spacing:.2em;color:#8A7E72">PACE</div><div style="margin-top:6px;font:500 16px/1.2 'Shippori Mincho',serif">{{ plan.pace }}</div></div>
+          </div>
+        </div>
+      </div>
+      <div style="background:#FBF7EF;border:1px solid rgba(28,25,23,.1);padding:34px 40px 40px;min-height:520px;display:flex;flex-direction:column;box-shadow:0 30px 60px -40px rgba(28,25,23,.35)">
+        <div style="display:flex;gap:6px;margin-bottom:28px">
+          <sc-for list="{{ progSegs }}" as="g" hint-placeholder-count="4"><span style="{{ g.st }}"></span></sc-for>
+        </div>
+        <sc-if value="{{ step0 }}" hint-placeholder-val="{{ true }}">
+          <div style="font:700 10px/1 'Zen Kaku Gothic New',sans-serif;letter-spacing:.2em;color:#6F645A;">01 · WHO IS TRAVELLING</div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:20px">
+            <sc-for list="{{ whoList }}" as="w" hint-placeholder-count="5">
+              <button onClick="{{ w.go }}" style="{{ w.st }}" style-hover="border-color:#1C1917"><span style="{{ w.kSt }}">{{ w.kanji }}</span><span style="font:500 14px/1.2 'Zen Kaku Gothic New',sans-serif">{{ w.label }}</span><span style="{{ w.dot }}"></span></button>
+            </sc-for>
+          </div>
+        </sc-if>
+        <sc-if value="{{ step1 }}" hint-placeholder-val="{{ false }}">
+          <div style="font:700 10px/1 'Zen Kaku Gothic New',sans-serif;letter-spacing:.2em;color:#6F645A;">02 · WHICH SEASON</div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:20px">
+            <sc-for list="{{ seasonList }}" as="s" hint-placeholder-count="4">
+              <div style="{{ s.st }}">
+                <div style="display:flex;align-items:center;gap:12px"><span style="{{ s.kSt }}">{{ s.k }}</span><div><div style="font:500 15px/1.2 'Shippori Mincho',serif">{{ s.name }}</div><div style="font-size:11.5px;color:#6F645A">{{ s.note }}</div></div></div>
+                <div style="display:flex;gap:6px;margin-top:14px">
+                  <sc-for list="{{ s.months }}" as="m" hint-placeholder-count="3"><button onClick="{{ m.go }}" style="{{ m.st }}">{{ m.label }}</button></sc-for>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+          <div style="font:700 10px/1 'Zen Kaku Gothic New',sans-serif;letter-spacing:.2em;color:#6F645A;margin-top:28px">HOW LONG</div>
+          <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap">
+            <sc-for list="{{ dayList }}" as="d" hint-placeholder-count="5">
+              <button onClick="{{ d.go }}" style="{{ d.st }}" style-hover="border-color:#1C1917">{{ d.label }}</button>
+            </sc-for>
+          </div>
+        </sc-if>
+        <sc-if value="{{ step2 }}" hint-placeholder-val="{{ false }}">
+          <div style="font:700 10px/1 'Zen Kaku Gothic New',sans-serif;letter-spacing:.2em;color:#6F645A;">03 · WHAT PULLS YOU · PICK ANY</div>
+          <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:20px">
+            <sc-for list="{{ interestList }}" as="i" hint-placeholder-count="10">
+              <button onClick="{{ i.go }}" style="{{ i.st }}" style-hover="border-color:#1C1917"><span style="{{ i.kSt }}">{{ i.kanji }}</span>{{ i.label }}</button>
+            </sc-for>
+          </div>
+          <div style="font:700 10px/1 'Zen Kaku Gothic New',sans-serif;letter-spacing:.2em;color:#6F645A;margin-top:28px">PACE</div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px">
+            <sc-for list="{{ paceList }}" as="p" hint-placeholder-count="3">
+              <button onClick="{{ p.go }}" style="{{ p.st }}" style-hover="border-color:#1C1917"><span style="font:400 22px/1 'Shippori Mincho',serif">{{ p.kanji }}</span><span>{{ p.label }}</span><span style="font-size:11px;color:inherit;opacity:.7">{{ p.note }}</span></button>
+            </sc-for>
+          </div>
+        </sc-if>
+        <sc-if value="{{ step3 }}" hint-placeholder-val="{{ false }}">
+          <div style="font:700 10px/1 'Zen Kaku Gothic New',sans-serif;letter-spacing:.2em;color:#6F645A;">04 · WHERE WE CAN REACH YOU</div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-top:20px">
+            <label style="display:flex;flex-direction:column;gap:6px;font:700 10px/1 'Zen Kaku Gothic New',sans-serif;letter-spacing:.16em;color:#5A524B">NAME<input value="{{ plan.name }}" onChange="{{ setName }}" placeholder="Your name" style="padding:14px 14px;border:1px solid rgba(28,25,23,.2);background:#fff;font-size:15px;letter-spacing:0;color:#1C1917"></label>
+            <label style="display:flex;flex-direction:column;gap:6px;font:700 10px/1 'Zen Kaku Gothic New',sans-serif;letter-spacing:.16em;color:#5A524B">EMAIL<input value="{{ plan.email }}" onChange="{{ setEmail }}" placeholder="you@example.com" style="padding:14px 14px;border:1px solid rgba(28,25,23,.2);background:#fff;font-size:15px;letter-spacing:0;color:#1C1917"></label>
+          </div>
+          <label style="display:flex;flex-direction:column;gap:6px;margin-top:14px;font:700 10px/1 'Zen Kaku Gothic New',sans-serif;letter-spacing:.16em;color:#5A524B">ANYTHING ELSE<textarea value="{{ plan.notes }}" onChange="{{ setNotes }}" rows="4" placeholder="A place you have dreamt about, a dietary need, a birthday on the road…" style="padding:14px;border:1px solid rgba(28,25,23,.2);background:#fff;font-size:15px;letter-spacing:0;color:#1C1917;resize:vertical"></textarea></label>
+          <div style="display:flex;align-items:center;gap:12px;margin-top:16px;padding:14px 16px;background:#F1E8D6;font-size:13px;color:#5A524B"><span style="font:400 22px/1 'Shippori Mincho',serif;color:#C8412B">折</span>We fold a first sketch of your journey within two working days. No payment, no obligation.</div>
+          <sc-if value="{{ planError }}" hint-placeholder-val="{{ false }}"><div style="margin-top:12px;font-size:13px;color:#B03722">Please add your name and a valid email so we can reply.</div></sc-if>
+        </sc-if>
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:auto;padding-top:32px;flex-wrap:wrap">
+          <button onClick="{{ prevStep }}" style="{{ backSt }}">← Back</button>
+          <div style="display:flex;align-items:center;gap:18px">
+            <span style="font-size:12.5px;color:#6F645A">{{ stepCount }}</span>
+            <button onClick="{{ nextStep }}" style="display:inline-flex;align-items:center;padding:14px 28px 14px 22px;background:#C8412B;color:#FFF6EA;font:700 11px/1 'Zen Kaku Gothic New',sans-serif;letter-spacing:.18em;text-transform:uppercase;border:0;cursor:pointer;clip-path:polygon(0 0,calc(100% - 10px) 0,100% 50%,calc(100% - 10px) 100%,0 100%);transition:background .2s" style-hover="background:#A53420">{{ nextLabel }}</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </sc-if>
+
+  <!-- ============ CONFIRM ============ -->
+  <sc-if value="{{ isConfirm }}" hint-placeholder-val="{{ false }}">
+    <section data-screen-label="Confirmation" style="position:relative;z-index:1;padding:90px 5cqw 120px;max-width:820px;margin:0 auto;text-align:center;animation:{{ riseAnim }}">
+      <div style="display:inline-block;animation:floatY 4s ease-in-out infinite">
+        <svg width="140" height="112" viewBox="0 0 34 28">
+          <polygon points="14,16 20,12 24,18 16,22" fill="#C8412B"></polygon>
+          <polygon points="20,12 25,4 27,6 24,18" fill="#A53420"></polygon>
+          <polygon points="25,4 24,1 31,4 27,6" fill="#1C1917"></polygon>
+          <polygon points="14,16 4,13 12,22 16,22" fill="#E0633F"></polygon>
+          <g style="transform-origin:19px 14px;animation:flap 2.6s ease-in-out infinite"><polygon points="17,14 23,2 26,12 20,16" fill="#E8744F"></polygon></g>
+          <g style="transform-origin:16px 18px;animation:flap2 2.6s ease-in-out infinite"><polygon points="15,18 3,26 12,16 18,16" fill="#8E2A1B"></polygon></g>
+        </svg>
+      </div>
+      <div style="margin-top:28px;font:700 10px/1 'Zen Kaku Gothic New',sans-serif;letter-spacing:.22em;color:#B03722">FIRST CREASE MADE</div>
+      <h1 style="margin:16px 0 0;font:400 clamp(40px,5cqw,68px)/1.05 'Shippori Mincho',serif;text-wrap:balance">Thank you, {{ planFirstName }}. Your sheet is with us.</h1>
+      <p style="margin:22px auto 0;max-width:500px;color:#5A524B;text-wrap:pretty">We will read what you wrote, pick the guide who fits it best, and send a first sketch of your journey to {{ plan.email }} within two working days.</p>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:2px;margin:56px auto 0;background:rgba(28,25,23,.1);text-align:left">
+        <sc-for list="{{ summaryList }}" as="s" hint-placeholder-count="4">
+          <div style="background:#FBF7EF;padding:22px 24px"><div style="font:700 9.5px/1 'Zen Kaku Gothic New',sans-serif;letter-spacing:.2em;color:#6F645A">{{ s.k }}</div><div style="margin-top:8px;font:500 18px/1.25 'Shippori Mincho',serif">{{ s.v }}</div></div>
+        </sc-for>
+      </div>
+      <div style="display:flex;justify-content:center;gap:12px;margin-top:44px;flex-wrap:wrap">
+        <button onClick="{{ goJournal }}" style="padding:15px 24px;background:transparent;border:1px solid rgba(28,25,23,.25);color:#1C1917;font:700 11px/1 'Zen Kaku Gothic New',sans-serif;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;transition:all .2s" style-hover="background:#1C1917;color:#F6EFE3">Read the journal while you wait</button>
+        <button onClick="{{ goHome }}" style="padding:15px 24px;background:none;border:0;color:#B03722;font:700 11px/1 'Zen Kaku Gothic New',sans-serif;letter-spacing:.18em;text-transform:uppercase;cursor:pointer">Back to the start</button>
+      </div>
+    </section>
+  </sc-if>
+
+  <!-- ============ ABOUT ============ -->
+  <sc-if value="{{ isAbout }}" hint-placeholder-val="{{ false }}">
+    <section data-screen-label="About" style="position:relative;z-index:1;animation:{{ riseAnim }}">
+      <div style="max-width:1240px;margin:0 auto;padding:80px 5cqw 70px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:56px;align-items:start">
+        <div>
+          <div style="font:700 10px/1 'Zen Kaku Gothic New',sans-serif;letter-spacing:.22em;color:#B03722">ABOUT KAMIWA</div>
+          <h1 style="margin:16px 0 0;font:400 clamp(40px,5cqw,72px)/1.02 'Shippori Mincho',serif;text-wrap:balance">A small studio in Kyoto that plans one journey at a time.</h1>
+        </div>
+        <div style="color:#5A524B;display:flex;flex-direction:column;gap:18px;padding-top:12px;text-wrap:pretty">
+          <p style="margin:0">Kamiwa means paper and harmony. We began in 2014 as three guides who kept meeting the same tired travellers: people who had seen everything and remembered very little. We started planning trips for friends, then friends of friends.</p>
+          <p style="margin:0">Today we shape around forty private journeys a year. Never more. Each one is built by the guide who will meet you at the station, so the plan and the person are the same thing.</p>
+          <div style="display:flex;gap:40px;margin-top:10px;flex-wrap:wrap">
+            <div><div style="font:400 40px/1 'Shippori Mincho',serif;color:#1C1917">40</div><div style="font:700 10px/1.4 'Zen Kaku Gothic New',sans-serif;letter-spacing:.18em;margin-top:6px">JOURNEYS A YEAR</div></div>
+            <div><div style="font:400 40px/1 'Shippori Mincho',serif;color:#1C1917">12</div><div style="font:700 10px/1.4 'Zen Kaku Gothic New',sans-serif;letter-spacing:.18em;margin-top:6px">YEARS IN KYOTO</div></div>
+            <div><div style="font:400 40px/1 'Shippori Mincho',serif;color:#1C1917">6</div><div style="font:700 10px/1.4 'Zen Kaku Gothic New',sans-serif;letter-spacing:.18em;margin-top:6px">GUIDES, ALL LOCAL</div></div>
+          </div>
+        </div>
+      </div>
+      <div style="background:#EFE4D0;padding:80px 5cqw 100px">
+        <div style="max-width:1240px;margin:0 auto">
+          <div style="font:700 10px/1 'Zen Kaku Gothic New',sans-serif;letter-spacing:.22em;color:#B03722">THE GUIDES</div>
+          <h2 style="margin:16px 0 0;font:400 clamp(30px,3.4cqw,44px)/1.1 'Shippori Mincho',serif">The people who will meet you</h2>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:24px;margin-top:48px">
+            <sc-for list="{{ guides }}" as="g" hint-placeholder-count="3">
+              <div style="background:#F6EFE3;padding:32px;transition:transform .35s cubic-bezier(.2,.7,.2,1),box-shadow .35s" style-hover="transform:translateY(-8px);box-shadow:0 30px 44px -26px rgba(28,25,23,.45)">
+                <div style="{{ g.avatar }}">{{ g.initial }}</div>
+                <h3 style="margin:22px 0 0;font:500 24px/1.2 'Shippori Mincho',serif">{{ g.name }}</h3>
+                <div style="margin-top:6px;font:700 10px/1 'Zen Kaku Gothic New',sans-serif;letter-spacing:.18em;color:#B03722">{{ g.role }}</div>
+                <p style="margin:14px 0 0;color:#5A524B;font-size:14px;text-wrap:pretty">{{ g.bio }}</p>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+    </section>
+  </sc-if>
+
+  <!-- ============ JOURNAL ============ -->
+  <sc-if value="{{ isJournal }}" hint-placeholder-val="{{ false }}">
+    <section data-screen-label="Journal" style="position:relative;z-index:1;padding:80px 5cqw 110px;max-width:1240px;margin:0 auto;animation:{{ riseAnim }}">
+      <div style="font:700 10px/1 'Zen Kaku Gothic New',sans-serif;letter-spacing:.22em;color:#B03722">JOURNAL</div>
+      <h1 style="margin:16px 0 0;font:400 clamp(40px,5cqw,72px)/1.02 'Shippori Mincho',serif;text-wrap:balance">Notes from the road.</h1>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:2px;margin-top:64px;background:rgba(28,25,23,.1)">
+        <sc-for list="{{ posts }}" as="p" hint-placeholder-count="4">
+          <article style="background:#F6EFE3;padding:36px 32px 40px;display:flex;flex-direction:column;gap:14px;transition:background .3s" style-hover="background:#EFE4D0">
+            <div style="{{ p.band }}"><span style="font:400 64px/1 'Shippori Mincho',serif;color:rgba(255,255,255,.9)">{{ p.kanji }}</span></div>
+            <div style="display:flex;justify-content:space-between;font:700 10px/1 'Zen Kaku Gothic New',sans-serif;letter-spacing:.18em;color:#6F645A;margin-top:8px"><span>{{ p.tag }}</span><span>{{ p.date }}</span></div>
+            <h3 style="margin:0;font:500 24px/1.2 'Shippori Mincho',serif;text-wrap:balance">{{ p.title }}</h3>
+            <p style="margin:0;color:#5A524B;font-size:14px;text-wrap:pretty">{{ p.excerpt }}</p>
+            <span style="margin-top:auto;padding-top:8px;font:700 10px/1 'Zen Kaku Gothic New',sans-serif;letter-spacing:.18em;color:#B03722">READ · {{ p.mins }} MIN</span>
+          </article>
+        </sc-for>
+      </div>
+    </section>
+  </sc-if>
+
+  <!-- ============ CONTACT ============ -->
+  <sc-if value="{{ isContact }}" hint-placeholder-val="{{ false }}">
+    <section data-screen-label="Contact" style="position:relative;z-index:1;padding:80px 5cqw 110px;max-width:1240px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:64px;animation:{{ riseAnim }}">
+      <div>
+        <div style="font:700 10px/1 'Zen Kaku Gothic New',sans-serif;letter-spacing:.22em;color:#B03722">CONTACT</div>
+        <h1 style="margin:16px 0 0;font:400 clamp(40px,5cqw,68px)/1.02 'Shippori Mincho',serif;text-wrap:balance">Write to us. A person replies.</h1>
+        <p style="margin:20px 0 0;color:#5A524B;max-width:420px;text-wrap:pretty">We answer every message within two working days, in English or Japanese. If it is urgent while you travel, the concierge line is on your itinerary.</p>
+        <div style="display:flex;flex-direction:column;gap:26px;margin-top:44px">
+          <div><div style="font:700 10px/1 'Zen Kaku Gothic New',sans-serif;letter-spacing:.2em;color:#6F645A">STUDIO</div><div style="margin-top:8px;font:500 18px/1.4 'Shippori Mincho',serif">2-14 Ninenzaka, Higashiyama-ku<br>Kyoto 605-0826, Japan</div></div>
+          <div><div style="font:700 10px/1 'Zen Kaku Gothic New',sans-serif;letter-spacing:.2em;color:#6F645A">EMAIL</div><div style="margin-top:8px;font:500 18px/1.4 'Shippori Mincho',serif">hello@kamiwa.jp</div></div>
+          <div><div style="font:700 10px/1 'Zen Kaku Gothic New',sans-serif;letter-spacing:.2em;color:#6F645A">HOURS</div><div style="margin-top:8px;font:500 18px/1.4 'Shippori Mincho',serif">Mon–Fri, 9:00–18:00 JST</div></div>
+        </div>
+      </div>
+      <div style="background:#FBF7EF;border:1px solid rgba(28,25,23,.1);padding:40px;box-shadow:0 30px 60px -40px rgba(28,25,23,.35)">
+        <sc-if value="{{ contactSent }}" hint-placeholder-val="{{ false }}">
+          <div style="text-align:center;padding:40px 0">
+            <div style="font:400 64px/1 'Shippori Mincho',serif;color:#B03722">届</div>
+            <h3 style="margin:18px 0 0;font:500 28px/1.2 'Shippori Mincho',serif">Delivered.</h3>
+            <p style="margin:10px 0 0;color:#5A524B">We will be in touch within two working days.</p>
+          </div>
+        </sc-if>
+        <sc-if value="{{ contactOpen }}" hint-placeholder-val="{{ true }}">
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px">
+            <label style="display:flex;flex-direction:column;gap:6px;font:700 10px/1 'Zen Kaku Gothic New',sans-serif;letter-spacing:.16em;color:#5A524B">NAME<input value="{{ contact.name }}" onChange="{{ setCName }}" placeholder="Your name" style="padding:14px;border:1px solid rgba(28,25,23,.2);background:#fff;font-size:15px;letter-spacing:0;color:#1C1917"></label>
+            <label style="display:flex;flex-direction:column;gap:6px;font:700 10px/1 'Zen Kaku Gothic New',sans-serif;letter-spacing:.16em;color:#5A524B">EMAIL<input value="{{ contact.email }}" onChange="{{ setCEmail }}" placeholder="you@example.com" style="padding:14px;border:1px solid rgba(28,25,23,.2);background:#fff;font-size:15px;letter-spacing:0;color:#1C1917"></label>
+          </div>
+          <label style="display:flex;flex-direction:column;gap:6px;margin-top:14px;font:700 10px/1 'Zen Kaku Gothic New',sans-serif;letter-spacing:.16em;color:#5A524B">MESSAGE<textarea value="{{ contact.msg }}" onChange="{{ setCMsg }}" rows="6" placeholder="Tell us a little about the trip you have in mind." style="padding:14px;border:1px solid rgba(28,25,23,.2);background:#fff;font-size:15px;letter-spacing:0;color:#1C1917;resize:vertical"></textarea></label>
+          <sc-if value="{{ contactError }}" hint-placeholder-val="{{ false }}"><div style="margin-top:12px;font-size:13px;color:#B03722">Please fill in all three fields.</div></sc-if>
+          <button onClick="{{ sendContact }}" style="margin-top:24px;display:inline-flex;align-items:center;padding:16px 30px 16px 24px;background:#C8412B;color:#FFF6EA;font:700 11px/1 'Zen Kaku Gothic New',sans-serif;letter-spacing:.18em;text-transform:uppercase;border:0;cursor:pointer;clip-path:polygon(0 0,calc(100% - 10px) 0,100% 50%,calc(100% - 10px) 100%,0 100%);transition:background .2s" style-hover="background:#A53420">Send message</button>
+        </sc-if>
+      </div>
+    </section>
+  </sc-if>
+
+  <!-- ============ FOOTER ============ -->
+  <footer style="position:relative;z-index:1;background:#1C1917;color:#F6EFE3;padding:64px 5cqw 36px">
+    <div style="max-width:1240px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:40px">
+      <div>
+        <div style="font:700 20px/1 'Shippori Mincho',serif">Kamiwa Journeys</div>
+        <p style="margin:14px 0 0;color:rgba(246,239,227,.6);font-size:13.5px;max-width:280px">Private journeys through Japan, folded around you. Kyoto · est. 2014.</p>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px;font-size:14px">
+        <div style="font:700 10px/1 'Zen Kaku Gothic New',sans-serif;letter-spacing:.2em;color:rgba(246,239,227,.5);margin-bottom:6px">EXPLORE</div>
+        <button onClick="{{ goDestinations }}" style="text-align:left;background:none;border:0;padding:6px 0;color:#F6EFE3;font-size:14px;cursor:pointer;font-family:inherit;min-height:32px">Destinations</button>
+        <button onClick="{{ goJourneys }}" style="text-align:left;background:none;border:0;padding:6px 0;color:#F6EFE3;font-size:14px;cursor:pointer;font-family:inherit;min-height:32px">Journeys</button>
+        <button onClick="{{ goJournal }}" style="text-align:left;background:none;border:0;padding:6px 0;color:#F6EFE3;font-size:14px;cursor:pointer;font-family:inherit;min-height:32px">Journal</button>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px;font-size:14px">
+        <div style="font:700 10px/1 'Zen Kaku Gothic New',sans-serif;letter-spacing:.2em;color:rgba(246,239,227,.5);margin-bottom:6px">STUDIO</div>
+        <button onClick="{{ goAbout }}" style="text-align:left;background:none;border:0;padding:6px 0;color:#F6EFE3;font-size:14px;cursor:pointer;font-family:inherit;min-height:32px">About &amp; guides</button>
+        <button onClick="{{ goContact }}" style="text-align:left;background:none;border:0;padding:6px 0;color:#F6EFE3;font-size:14px;cursor:pointer;font-family:inherit;min-height:32px">Contact</button>
+        <button onClick="{{ goPlan }}" style="text-align:left;background:none;border:0;padding:6px 0;color:#E8744F;font-size:14px;cursor:pointer;font-family:inherit;min-height:32px">Plan your journey</button>
+      </div>
+      <div style="font:400 120px/1 'Shippori Mincho',serif;color:rgba(246,239,227,.08);text-align:right;user-select:none">折</div>
+    </div>
+    <div style="max-width:1240px;margin:44px auto 0;padding-top:20px;border-top:1px solid rgba(246,239,227,.12);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:12px;color:rgba(246,239,227,.5)"><span>© 2026 Kamiwa Journeys K.K.</span><span>Travel agency licence · Kyoto Pref. No. 3-1042</span></div>
+  </footer>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;page&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;home&quot;,&quot;options&quot;:[&quot;home&quot;,&quot;destinations&quot;,&quot;detail&quot;,&quot;journeys&quot;,&quot;plan&quot;,&quot;confirm&quot;,&quot;about&quot;,&quot;journal&quot;,&quot;contact&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Screen&quot;},&quot;dest&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;kyoto&quot;,&quot;options&quot;:[&quot;tokyo&quot;,&quot;kyoto&quot;,&quot;nakasendo&quot;,&quot;hakone&quot;,&quot;kanazawa&quot;,&quot;naoshima&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Screen&quot;},&quot;pinnedScene&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:-1,&quot;min&quot;:-1,&quot;max&quot;:3,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Home hero&quot;},&quot;lang&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;en&quot;,&quot;options&quot;:[&quot;en&quot;,&quot;fr&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Layout&quot;},&quot;motion&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Home hero&quot;},&quot;planStep&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:0,&quot;min&quot;:0,&quot;max&quot;:3,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Screen&quot;},&quot;liveDiorama&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Home hero&quot;},&quot;device&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;auto&quot;,&quot;options&quot;:[&quot;auto&quot;,&quot;desktop&quot;,&quot;mobile&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Layout&quot;}}">
+const h = React.createElement;
+const SCENE_IDS = ['sceneKyoto', 'sceneTokyo', 'sceneNakasendo', 'sceneCrane'];
+const SCENE_FALLBACK = ['assets/scene-kyoto-v2.png', 'assets/scene-tokyo-v2.png', 'assets/scene-nakasendo-v2.png', 'assets/scene-crane-v5.png'];
+const sceneSrc = i => (typeof window !== 'undefined' && window.__resources && window.__resources[SCENE_IDS[i]]) || SCENE_FALLBACK[i];
+const shade = (hex, f) => { const n = parseInt(hex.slice(1), 16); const m = v => Math.max(0, Math.min(255, Math.round(f >= 1 ? v + (255 - v) * (f - 1) : v * f))); return '#' + [n >> 16, n >> 8 & 255, n & 255].map(v => m(v).toString(16).padStart(2, '0')).join(''); };
+const SCENES = [
+  { name: 'Kyoto', idx: '01 / 04', eyebrow: 'THE FIRST FOLD', title: 'Fold yourself into Kyoto.', body: 'Begin where Japan is quietest: temple gates at dawn, a tea master who talks about rain, and an afternoon with nothing scheduled at all.', tag1: 'Dawn access', tag2: 'Tea ceremony' },
+  { name: 'Tokyo', idx: '02 / 04', eyebrow: 'THE CITY', title: 'Then Tokyo, on your terms.', body: 'Leave the obvious route behind with a guide who knows where the city softens: eight-seat counters, a jazz kissa, the market before the tour groups.', tag1: 'Private arrivals', tag2: 'Local guides' },
+  { name: 'Nakasendō', idx: '03 / 04', eyebrow: 'THE WALK', title: 'Walk the old post road.', body: 'Two days on the Nakasendō between Magome and Tsumago. Cedar forest, a family-run inn, dinner over the hearth.', tag1: 'Guided walk', tag2: 'Ryokan stay' },
+  { name: 'Your Japan', idx: '04 / 04', eyebrow: 'YOURS TO FOLD', title: 'Make Japan your own.', body: 'We shape a private journey around what pulls you closer, not a checklist.', tag1: 'Tailor-made', tag2: 'Boutique support' }];
+const DEST = [
+  { id: 'kyoto', name: 'Kyoto', kanji: '京都', region: 'KANSAI', nights: '4–5 NIGHTS', c: '#C8412B', line: 'Temples at dawn, before the city wakes.', intro: 'Kyoto rewards early risers and people who stay long enough to stop counting temples. We arrange the doors that open before the crowds and the afternoons that stay open.', days: [['01', 'Dawn at Fushimi Inari', 'Up the mountain at six with only the foxes. Breakfast at a rice-flour bakery afterwards.'], ['02', 'Tea, slowly', 'A private ceremony with a master in Higashiyama, then Nishiki market with a chef who buys there every morning.'], ['03', 'Arashiyama by bicycle', 'Through the bamboo before eight, a tofu lunch by the river, and an open afternoon.']], stayName: 'A machiya townhouse in Gion', stay: 'Your own restored wooden house with a courtyard garden and a housekeeper who leaves breakfast.', season: 'Mid-November, or early April', seasonNote: 'Maple season in the temple gardens, or the ten days of cherry blossom. Both need booking a year ahead.' },
+  { id: 'tokyo', name: 'Tokyo', kanji: '東京', region: 'KANTŌ', nights: '3–4 NIGHTS', c: '#1F2A5C', line: 'Arrive, then leave the obvious route behind.', intro: 'The biggest city on earth has quiet in it. We know where: a morning fish market with no tour groups, a jazz kissa in Shimokitazawa, a sushi counter with eight seats.', days: [['01', 'Arrival, softly', 'Private transfer from Haneda. A walk through Yanaka at dusk, when the shops pull down their shutters and the cats come out.'], ['02', 'Old Tokyo, new Tokyo', 'Kappabashi kitchen street, a knife maker, then across the river to a teamLab room booked for the quietest hour.'], ['03', 'The day you choose', 'Sumo morning practice, a Kagurazaka kaiseki lunch, or nothing at all. Your guide has three plans and no opinion.']], stayName: 'A hinoki-bath hotel in Kagurazaka', stay: 'Twelve rooms, a cypress bath on the roof, and a breakfast that changes with the market.', season: 'Late October to early December', seasonNote: 'Clear skies, ginkgo turning yellow along Meiji-jingu Gaien, and the summer crowds gone.' },
+  { id: 'nakasendo', name: 'Nakasendō', kanji: '中山道', region: 'KISO VALLEY', nights: '2 NIGHTS', c: '#3F5A46', line: 'Walk the old post road between Magome and Tsumago.', intro: 'The Edo-period road between Kyoto and Tokyo survives in the Kiso Valley as a cedar-lined path between wooden post towns. Eight kilometres, one waterfall, and an inn that has fed walkers for three hundred years.', days: [['01', 'Magome to Tsumago', 'Eight kilometres through cedar forest, past two waterfalls and a tea house that still rings a bell for bears.'], ['02', 'A morning in Tsumago', 'The town before the day-trippers. Lacquerware, a sake brewery, and the train onward from Nagiso.']], stayName: 'A family-run minshuku', stay: 'Tatami rooms, a shared cypress bath, and dinner cooked over the irori hearth with the family.', season: 'May, or late October', seasonNote: 'Fresh green in spring, or the valley turning gold. Avoid August humidity.' },
+  { id: 'hakone', name: 'Hakone', kanji: '箱根', region: 'KANAGAWA', nights: '2 NIGHTS', c: '#8A6A3D', line: 'Onsen steam, Fuji on a clear morning.', intro: 'An hour from Tokyo and a different century. Hot springs, an open-air sculpture park, and the mountain appearing over the lake if the weather is kind.', days: [['01', 'Into the mountains', 'The switchback train up, the Open-Air Museum, and your first onsen before dinner.'], ['02', 'Lake and mountain', 'Early on Lake Ashi for the Fuji view, then the Old Tokaido cedar avenue.']], stayName: 'A ryokan with private open-air baths', stay: 'Each room has its own rotenburo. Kaiseki dinner in the room, futons laid while you eat.', season: 'November to February', seasonNote: 'Winter gives the clearest Fuji views and the best case for a hot bath.' },
+  { id: 'kanazawa', name: 'Kanazawa', kanji: '金沢', region: 'HOKURIKU', nights: '2–3 NIGHTS', c: '#9A7A1A', line: 'Gold leaf, gardens and a quieter craft city.', intro: 'Kyoto\'s craft traditions without Kyoto\'s crowds. Kenroku-en garden, a samurai district, and workshops where gold leaf is still beaten by hand.', days: [['01', 'Garden and castle', 'Kenroku-en at opening, then the Nagamachi samurai lanes with a resident historian.'], ['02', 'Craft day', 'Gold-leaf studio, Kutani porcelain, and dinner in a Higashi-chaya teahouse.']], stayName: 'A converted merchant house', stay: 'Six rooms around a moss garden, a five-minute walk from the fish market.', season: 'June, or early winter', seasonNote: 'Irises in June; snow-laden pines under rope supports in December.' },
+  { id: 'naoshima', name: 'Naoshima', kanji: '直島', region: 'SETO INLAND SEA', nights: '2 NIGHTS', c: '#4C7A8C', line: 'An island of art in the Seto Inland Sea.', intro: 'A fishing island turned into a quiet museum. Ando concrete, Monet in natural light, and the sea from every window.', days: [['01', 'Benesse House', 'Ferry from Uno, bicycles, and the museum that is also your hotel.'], ['02', 'Chichu and the Art Houses', 'Chichu Art Museum at opening, then the village Art House Project on foot.']], stayName: 'Benesse House Oval', stay: 'Six rooms on the hill, reached by a private monorail, open to the sky.', season: 'April to June, September to October', seasonNote: 'Mild sea air. Triennale years get busy; we book a year out.' }];
+const PKG = [
+  { id: 'first', name: 'The First Fold', kanji: '初', dur: '10 DAYS', for: 'First-time visitors', route: 'Kyoto · Hakone · Tokyo', c: '#1F2A5C', blurb: 'The essentials, unhurried. Kyoto first, a mountain in between, Tokyo to finish, with enough open time to get pleasantly lost.', inc: ['Private arrival and every transfer', 'Two guided days per city', 'Rail passes and seat reservations', 'Concierge line, 24/7 while travelling'] },
+  { id: 'cranes', name: 'Two Cranes', kanji: '鶴', dur: '12 DAYS', for: 'Couples and honeymoons', route: 'Kyoto · Naoshima · Tokyo', c: '#C8412B', blurb: 'Quiet rooms, long dinners, and an island of art at the end. Built for two people who want to be left alone beautifully.', inc: ['Machiya townhouse in Gion', 'Private tea ceremony', 'Benesse House on Naoshima', 'A surprise we will not spoil'] },
+  { id: 'lanterns', name: 'Paper Lanterns', kanji: '灯', dur: '14 DAYS', for: 'Families', route: 'Kyoto · Nakasendō · Hakone · Tokyo', c: '#3F5A46', blurb: 'A walk the children will talk about, a ryokan with a hearth, and cities paced for small legs and big questions.', inc: ['Connecting family rooms throughout', 'Guided Nakasendō walk with a naturalist', 'Ninja and taiko workshops', 'Kids\' bento on every train'] }];
+const GUIDES = [
+  { name: 'Aiko Matsumoto', initial: '松', role: 'KYOTO · TEA AND TEMPLES', c: '#C8412B', bio: 'Born in Higashiyama, trained in Urasenke tea for twenty years. Aiko knows which temple gates open early and which abbots like visitors.' },
+  { name: 'Kenji Hara', initial: '原', role: 'NAKASENDŌ · WALKING', c: '#3F5A46', bio: 'Grew up in Tsumago, where his parents still run an inn. Kenji has walked the Kiso road more than a thousand times and still points at things.' },
+  { name: 'Mio Tanaka', initial: '田', role: 'TOKYO · FOOD AND NIGHT', c: '#1F2A5C', bio: 'Former sous-chef, now our Tokyo lead. Mio books the eight-seat counters and knows which izakaya to walk into at midnight.' }];
+const POSTS = [
+  { kanji: '雨', c: '#1F2A5C', tag: 'KYOTO', date: 'SEP 2026', title: 'What a tea master taught us about rain', excerpt: 'We asked Sato-sensei why the ceremony felt different in September. He said the water knows.', mins: 4 },
+  { kanji: '道', c: '#3F5A46', tag: 'NAKASENDŌ', date: 'AUG 2026', title: 'Eight kilometres, three hundred years', excerpt: 'Kenji on why the Magome to Tsumago walk is the right length, and why the bear bells are not a joke.', mins: 6 },
+  { kanji: '市', c: '#C8412B', tag: 'TOKYO', date: 'JUL 2026', title: 'The fish market after the tourists left', excerpt: 'Toyosu at five in the morning is loud, cold and worth it. Mio explains how to do it without being in the way.', mins: 5 },
+  { kanji: '紙', c: '#9A7A1A', tag: 'STUDIO', date: 'JUN 2026', title: 'Why we plan forty journeys a year and not fifty', excerpt: 'A note from the studio on saying no, and what it buys the people we say yes to.', mins: 3 },
+  { kanji: '湯', c: '#8A6A3D', tag: 'HAKONE', date: 'MAY 2026', title: 'How to sit in an onsen without worrying', excerpt: 'Tattoos, towels, which side to wash on. Everything first-timers ask us, answered once.', mins: 4 },
+  { kanji: '島', c: '#4C7A8C', tag: 'NAOSHIMA', date: 'APR 2026', title: 'A museum you sleep in', excerpt: 'Two nights at Benesse House, and why we always book the ferry before the room.', mins: 5 }];
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+const WHO = [['二', 'A couple', '#C8412B'], ['家', 'A family', '#3F5A46'], ['友', 'Friends', '#1F2A5C'], ['独', 'Solo', '#8A6A3D'], ['祝', 'A celebration', '#B8901F']];
+const SEASONS = [{ k: '春', name: 'Spring', note: 'Sakura, mild days', c: '#C2606E', months: ['Mar', 'Apr', 'May'] }, { k: '夏', name: 'Summer', note: 'Festivals, humid', c: '#3F5A46', months: ['Jun', 'Jul', 'Aug'] }, { k: '秋', name: 'Autumn', note: 'Maples, clear skies', c: '#C8412B', months: ['Sep', 'Oct', 'Nov'] }, { k: '冬', name: 'Winter', note: 'Snow, onsen steam', c: '#1F2A5C', months: ['Dec', 'Jan', 'Feb'] }];
+const INTERESTS = [['寺', 'Temples and gardens'], ['食', 'Food and markets'], ['歩', 'Walking'], ['湯', 'Onsen'], ['美', 'Art and architecture'], ['工', 'Craft workshops'], ['鉄', 'Trains'], ['夜', 'Nightlife'], ['山', 'Nature'], ['写', 'Photography']];
+const PACES = [['緩', 'Slow', 'One thing a day'], ['和', 'Balanced', 'Room to wander'], ['多', 'See a lot', 'Early starts']];
+const STEPS = [['Who', 'Who is travelling?', 'Tell us who is coming. It changes the rooms, the pace and the guide we choose for you.'], ['When', 'When, and for how long?', 'A month is enough. We will tell you what that month is like and whether to shift it.'], ['What', 'What pulls you?', 'Pick anything that sounds right. There are no wrong answers and no minimum.'], ['You', 'Where can we reach you?', 'A first sketch of your journey goes out within two working days.']];
+const BTN_OFF = { whiteSpace: 'nowrap', padding: '12px 14px', border: '1px solid rgba(28,25,23,.2)', background: '#fff', color: '#1C1917', font: "500 13px/1.2 'Zen Kaku Gothic New',sans-serif", cursor: 'pointer', transition: 'all .2s' };
+const BTN_ON = Object.assign({}, BTN_OFF, { background: '#1C1917', color: '#F6EFE3', borderColor: '#1C1917' });
+
+const FR = {"Skip to content":"Aller au contenu","Plan your journey":"Préparer votre voyage","Begin your journey":"Commencer votre voyage","DESTINATIONS":"DESTINATIONS","JOURNEYS":"VOYAGES","JOURNAL":"JOURNAL","ABOUT":"À PROPOS","CONTACT":"CONTACT","YOUR JAPAN":"VOTRE JAPON","Home":"Accueil","Destinations":"Destinations","Journeys":"Voyages","Journal":"Journal","About":"À propos","Contact":"Contact","Primary":"Principale","Menu":"Menu","Paper diorama of Japan":"Diorama en papier du Japon","THE FIRST FOLD":"LE PREMIER PLI","THE CITY":"LA VILLE","THE WALK":"LA MARCHE","YOURS TO FOLD":"À VOUS DE PLIER","Fold yourself into Kyoto.":"Glissez-vous dans Kyoto.","Then Tokyo, on your terms.":"Puis Tokyo, à votre façon.","Walk the old post road.":"Marchez sur l’ancienne route postale.","Make Japan your own.":"Faites du Japon le vôtre.","Begin where Japan is quietest: temple gates at dawn, a tea master who talks about rain, and an afternoon with nothing scheduled at all.":"Commencez là où le Japon est le plus calme : des portes de temple à l’aube, un maître de thé qui parle de la pluie, et un après-midi sans rien de prévu.","Leave the obvious route behind with a guide who knows where the city softens: eight-seat counters, a jazz kissa, the market before the tour groups.":"Quittez les sentiers battus avec un guide qui sait où la ville s’adoucit : des comptoirs de huit places, un jazz kissa, le marché avant les groupes.","Two days on the Nakasendō between Magome and Tsumago. Cedar forest, a family-run inn, dinner over the hearth.":"Deux jours sur le Nakasendō entre Magome et Tsumago. Forêt de cèdres, auberge familiale, dîner autour du foyer.","We shape a private journey around what pulls you closer, not a checklist.":"Nous façonnons un voyage privé autour de ce qui vous attire, pas d’une liste à cocher.","Dawn access":"Accès à l’aube","Tea ceremony":"Cérémonie du thé","Private arrivals":"Arrivées privées","Local guides":"Guides locaux","Guided walk":"Marche guidée","Ryokan stay":"Nuit en ryokan","Tailor-made":"Sur mesure","Boutique support":"Accompagnement dédié","Next fold":"Pli suivant","Fold again":"Replier","Your Japan":"Votre Japon","HOW WE FOLD A JOURNEY":"COMMENT NOUS PLIONS UN VOYAGE","One sheet of paper. Every crease is yours.":"Une feuille de papier. Chaque pli vous appartient.","No two travellers want the same Japan. We start with a blank sheet, listen for what pulls you, and fold the trip around it: the pace, the people you meet, the mornings left open.":"Aucun voyageur ne cherche le même Japon. Nous partons d’une feuille blanche, nous écoutons ce qui vous attire, et nous plions le voyage autour : le rythme, les personnes que vous rencontrez, les matinées laissées libres.","We listen first":"Nous écoutons d’abord","A forty-minute call, or a long email if you prefer. Who is coming, what you have loved elsewhere, what you are tired of.":"Un appel de quarante minutes, ou un long e-mail si vous préférez. Qui vient, ce que vous avez aimé ailleurs, ce dont vous êtes lassé.","We fold a first sketch":"Nous plions une première esquisse","A route, a rhythm and the guide who fits. Rooms we have slept in, restaurants we have eaten in, nothing off a list.":"Un itinéraire, un rythme et le guide qui vous correspond. Des chambres où nous avons dormi, des restaurants où nous avons mangé, rien tiré d’une liste.","We travel with you":"Nous voyageons avec vous","Your guide meets you at the station. A concierge line stays open the whole way. Plans bend when the weather or your mood does.":"Votre guide vous accueille à la gare. Une ligne de conciergerie reste ouverte tout du long. Les plans s’adaptent quand la météo ou votre humeur changent.","THREE WAYS TO BEGIN":"TROIS FAÇONS DE COMMENCER","Journeys we love to shape":"Les voyages que nous aimons façonner","All journeys →":"Tous les voyages →","FROM A TRAVELLER":"PAROLE DE VOYAGEURS","“We told Aiko we wanted quiet. She gave us a temple at six in the morning, a tea master who talked about rain, and an afternoon with nothing in it. It was the best day of the trip.”":"« Nous avions dit à Aiko que nous voulions du calme. Elle nous a offert un temple à six heures du matin, un maître de thé qui parlait de la pluie, et un après-midi où il ne se passait rien. Ce fut le plus beau jour du voyage. »","MARA & JONAS · HONEYMOON, OCTOBER":"MARA & JONAS · LUNE DE MIEL, OCTOBRE","Ready to fold?":"Prêts à plier ?","Tell us who is travelling and what pulls you. We reply within two days with a first sketch of your journey.":"Dites-nous qui voyage et ce qui vous attire. Nous répondons sous deux jours avec une première esquisse de votre voyage.","Browse destinations":"Voir les destinations","Six places we keep going back to.":"Six lieux où nous revenons sans cesse.","Not a list of everything. These are the places where we know the innkeepers by name, and where a private day feels different from the guidebook one.":"Pas une liste exhaustive. Ce sont les lieux où nous connaissons les aubergistes par leur nom, et où une journée privée n’a rien à voir avec celle du guide touristique.","KISO VALLEY":"VALLÉE DE KISO","SETO INLAND SEA":"MER INTÉRIEURE DE SETO","4–5 NIGHTS":"4–5 NUITS","3–4 NIGHTS":"3–4 NUITS","2 NIGHTS":"2 NUITS","2–3 NIGHTS":"2–3 NUITS","Temples at dawn, before the city wakes.":"Des temples à l’aube, avant que la ville ne s’éveille.","Arrive, then leave the obvious route behind.":"Arrivez, puis quittez les sentiers battus.","Walk the old post road between Magome and Tsumago.":"Marchez sur l’ancienne route postale entre Magome et Tsumago.","Onsen steam, Fuji on a clear morning.":"Vapeur d’onsen, Fuji par matin clair.","Gold leaf, gardens and a quieter craft city.":"Feuille d’or, jardins et une ville d’artisans plus paisible.","An island of art in the Seto Inland Sea.":"Une île d’art dans la mer intérieure de Seto.","← ALL DESTINATIONS":"← TOUTES LES DESTINATIONS","HOW WE SPEND THE DAYS":"AU FIL DES JOURS","WHERE YOU STAY":"OÙ VOUS DORMEZ","BEST SEASON":"MEILLEURE SAISON","Fold":"Ajouter","into my journey":"à mon voyage","Kyoto rewards early risers and people who stay long enough to stop counting temples. We arrange the doors that open before the crowds and the afternoons that stay open.":"Kyoto récompense les lève-tôt et ceux qui restent assez longtemps pour cesser de compter les temples. Nous ouvrons les portes avant la foule et gardons les après-midi libres.","Dawn at Fushimi Inari":"L’aube à Fushimi Inari","Up the mountain at six with only the foxes. Breakfast at a rice-flour bakery afterwards.":"Montée à six heures, seuls avec les renards. Petit-déjeuner ensuite dans une boulangerie à la farine de riz.","Tea, slowly":"Le thé, lentement","A private ceremony with a master in Higashiyama, then Nishiki market with a chef who buys there every morning.":"Une cérémonie privée avec un maître à Higashiyama, puis le marché Nishiki avec un chef qui s’y fournit chaque matin.","Arashiyama by bicycle":"Arashiyama à vélo","Through the bamboo before eight, a tofu lunch by the river, and an open afternoon.":"Les bambous avant huit heures, un déjeuner de tofu au bord de la rivière et un après-midi libre.","A machiya townhouse in Gion":"Une machiya à Gion","Your own restored wooden house with a courtyard garden and a housekeeper who leaves breakfast.":"Votre propre maison de bois restaurée, avec jardin intérieur et une gouvernante qui laisse le petit-déjeuner.","Mid-November, or early April":"Mi-novembre, ou début avril","Maple season in the temple gardens, or the ten days of cherry blossom. Both need booking a year ahead.":"La saison des érables dans les jardins des temples, ou les dix jours des cerisiers en fleurs. Les deux se réservent un an à l’avance.","The biggest city on earth has quiet in it. We know where: a morning fish market with no tour groups, a jazz kissa in Shimokitazawa, a sushi counter with eight seats.":"La plus grande ville du monde a ses silences. Nous savons où : un marché aux poissons matinal sans groupes, un jazz kissa à Shimokitazawa, un comptoir de sushi de huit places.","Arrival, softly":"Une arrivée en douceur","Private transfer from Haneda. A walk through Yanaka at dusk, when the shops pull down their shutters and the cats come out.":"Transfert privé depuis Haneda. Une promenade dans Yanaka au crépuscule, quand les boutiques baissent leurs rideaux et que les chats sortent.","Old Tokyo, new Tokyo":"Vieux Tokyo, nouveau Tokyo","Kappabashi kitchen street, a knife maker, then across the river to a teamLab room booked for the quietest hour.":"La rue des ustensiles de Kappabashi, un coutelier, puis de l’autre côté du fleuve une salle teamLab réservée à l’heure la plus calme.","The day you choose":"Le jour que vous choisissez","Sumo morning practice, a Kagurazaka kaiseki lunch, or nothing at all. Your guide has three plans and no opinion.":"Entraînement de sumo le matin, déjeuner kaiseki à Kagurazaka, ou rien du tout. Votre guide a trois plans et aucune préférence.","A hinoki-bath hotel in Kagurazaka":"Un hôtel à bain de hinoki à Kagurazaka","Twelve rooms, a cypress bath on the roof, and a breakfast that changes with the market.":"Douze chambres, un bain de cyprès sur le toit et un petit-déjeuner qui change avec le marché.","Late October to early December":"Fin octobre à début décembre","Clear skies, ginkgo turning yellow along Meiji-jingu Gaien, and the summer crowds gone.":"Ciel clair, ginkgos qui jaunissent le long de Meiji-jingu Gaien, et les foules de l’été parties.","The Edo-period road between Kyoto and Tokyo survives in the Kiso Valley as a cedar-lined path between wooden post towns. Eight kilometres, one waterfall, and an inn that has fed walkers for three hundred years.":"La route de l’époque d’Edo entre Kyoto et Tokyo survit dans la vallée de Kiso : un chemin bordé de cèdres entre des relais de bois. Huit kilomètres, une cascade, et une auberge qui nourrit les marcheurs depuis trois cents ans.","Magome to Tsumago":"De Magome à Tsumago","Eight kilometres through cedar forest, past two waterfalls and a tea house that still rings a bell for bears.":"Huit kilomètres à travers la forêt de cèdres, deux cascades, et une maison de thé qui fait encore sonner une cloche pour les ours.","A morning in Tsumago":"Une matinée à Tsumago","The town before the day-trippers. Lacquerware, a sake brewery, and the train onward from Nagiso.":"Le village avant les excursionnistes. Laques, une brasserie de saké, puis le train depuis Nagiso.","A family-run minshuku":"Un minshuku familial","Tatami rooms, a shared cypress bath, and dinner cooked over the irori hearth with the family.":"Chambres en tatami, bain de cyprès partagé et dîner cuit sur le foyer irori avec la famille.","May, or late October":"Mai, ou fin octobre","Fresh green in spring, or the valley turning gold. Avoid August humidity.":"Le vert frais du printemps, ou la vallée qui se dore. Évitez l’humidité d’août.","An hour from Tokyo and a different century. Hot springs, an open-air sculpture park, and the mountain appearing over the lake if the weather is kind.":"À une heure de Tokyo et dans un autre siècle. Des sources chaudes, un parc de sculptures en plein air, et la montagne au-dessus du lac si le temps le permet.","Into the mountains":"Vers les montagnes","The switchback train up, the Open-Air Museum, and your first onsen before dinner.":"Le train en lacets, l’Open-Air Museum, et votre premier onsen avant le dîner.","Lake and mountain":"Lac et montagne","Early on Lake Ashi for the Fuji view, then the Old Tokaido cedar avenue.":"Tôt sur le lac Ashi pour la vue sur le Fuji, puis l’allée de cèdres de l’ancien Tōkaidō.","A ryokan with private open-air baths":"Un ryokan avec bains privés en plein air","Each room has its own rotenburo. Kaiseki dinner in the room, futons laid while you eat.":"Chaque chambre a son rotenburo. Dîner kaiseki en chambre, futons installés pendant le repas.","November to February":"De novembre à février","Winter gives the clearest Fuji views and the best case for a hot bath.":"L’hiver offre les vues les plus nettes sur le Fuji, et la meilleure excuse pour un bain chaud.","Kyoto's craft traditions without Kyoto's crowds. Kenroku-en garden, a samurai district, and workshops where gold leaf is still beaten by hand.":"L’artisanat de Kyoto sans la foule de Kyoto. Le jardin Kenroku-en, un quartier de samouraïs, et des ateliers où la feuille d’or est encore battue à la main.","Garden and castle":"Jardin et château","Kenroku-en at opening, then the Nagamachi samurai lanes with a resident historian.":"Kenroku-en à l’ouverture, puis les ruelles samouraïs de Nagamachi avec un historien local.","Craft day":"Journée artisanat","Gold-leaf studio, Kutani porcelain, and dinner in a Higashi-chaya teahouse.":"Atelier de feuille d’or, porcelaine de Kutani, et dîner dans une maison de thé de Higashi-chaya.","A converted merchant house":"Une maison de marchand réhabilitée","Six rooms around a moss garden, a five-minute walk from the fish market.":"Six chambres autour d’un jardin de mousse, à cinq minutes à pied du marché aux poissons.","June, or early winter":"Juin, ou début de l’hiver","Irises in June; snow-laden pines under rope supports in December.":"Les iris en juin ; en décembre, les pins chargés de neige soutenus par des cordes.","A fishing island turned into a quiet museum. Ando concrete, Monet in natural light, and the sea from every window.":"Une île de pêcheurs devenue un musée paisible. Le béton d’Andō, Monet en lumière naturelle, et la mer à chaque fenêtre.","Ferry from Uno, bicycles, and the museum that is also your hotel.":"Ferry depuis Uno, vélos, et le musée qui est aussi votre hôtel.","Chichu and the Art Houses":"Chichu et les Art Houses","Chichu Art Museum at opening, then the village Art House Project on foot.":"Le musée d’art Chichu à l’ouverture, puis l’Art House Project du village à pied.","Six rooms on the hill, reached by a private monorail, open to the sky.":"Six chambres sur la colline, accessibles par un monorail privé, ouvertes sur le ciel.","April to June, September to October":"D’avril à juin, de septembre à octobre","Mild sea air. Triennale years get busy; we book a year out.":"Air marin doux. Les années de Triennale sont chargées ; nous réservons un an à l’avance.","Three starting folds. None of them final.":"Trois premiers plis. Aucun n’est définitif.","Each journey below is a shape we have refined over years. Treat it as a first crease: every one is reworked around who you are before we send a plan. Pricing follows the plan, never the other way round.":"Chaque voyage ci-dessous est une forme affinée au fil des ans. Voyez-le comme un premier pli : chacun est retravaillé selon qui vous êtes avant que nous envoyions un programme. Le prix suit le programme, jamais l’inverse.","The First Fold":"Le Premier Pli","Two Cranes":"Deux Grues","Paper Lanterns":"Lanternes de papier","10 DAYS":"10 JOURS","12 DAYS":"12 JOURS","14 DAYS":"14 JOURS","First-time visitors":"Premier voyage au Japon","Couples and honeymoons":"Couples et lunes de miel","Families":"Familles","The essentials, unhurried. Kyoto first, a mountain in between, Tokyo to finish, with enough open time to get pleasantly lost.":"L’essentiel, sans se presser. Kyoto d’abord, une montagne entre les deux, Tokyo pour finir, avec assez de temps libre pour se perdre avec plaisir.","Quiet rooms, long dinners, and an island of art at the end. Built for two people who want to be left alone beautifully.":"Des chambres calmes, de longs dîners, et une île d’art pour finir. Pensé pour deux personnes qui veulent qu’on les laisse tranquilles, joliment.","A walk the children will talk about, a ryokan with a hearth, and cities paced for small legs and big questions.":"Une marche dont les enfants parleront longtemps, un ryokan avec un foyer, et des villes au rythme des petites jambes et des grandes questions.","Private arrival and every transfer":"Arrivée privée et tous les transferts","Two guided days per city":"Deux jours guidés par ville","Rail passes and seat reservations":"Pass ferroviaires et places réservées","Concierge line, 24/7 while travelling":"Conciergerie 24 h/24 pendant le voyage","Machiya townhouse in Gion":"Machiya à Gion","Private tea ceremony":"Cérémonie du thé privée","Benesse House on Naoshima":"Benesse House à Naoshima","A surprise we will not spoil":"Une surprise que nous ne dévoilerons pas","Connecting family rooms throughout":"Chambres familiales communicantes partout","Guided Nakasendō walk with a naturalist":"Marche guidée sur le Nakasendō avec un naturaliste","Ninja and taiko workshops":"Ateliers ninja et taiko","Kids' bento on every train":"Bento enfant dans chaque train","Enquire":"Demander un devis","Private journey · quote after a short call":"Voyage privé · devis après un court appel","PLAN YOUR JOURNEY":"PRÉPARER VOTRE VOYAGE","YOUR SHEET":"VOTRE FEUILLE","WHO":"QUI","WHEN":"QUAND","PULLS":"ENVIES","PACE":"RYTHME","01 · WHO IS TRAVELLING":"01 · QUI VOYAGE","02 · WHICH SEASON":"02 · QUELLE SAISON","HOW LONG":"COMBIEN DE TEMPS","03 · WHAT PULLS YOU · PICK ANY":"03 · CE QUI VOUS ATTIRE · CHOIX LIBRE","04 · WHERE WE CAN REACH YOU":"04 · OÙ VOUS JOINDRE","NAME":"NOM","EMAIL":"E-MAIL","ANYTHING ELSE":"AUTRE CHOSE ?","Your name":"Votre nom","A place you have dreamt about, a dietary need, a birthday on the road…":"Un lieu dont vous rêvez, un régime alimentaire, un anniversaire en route…","We fold a first sketch of your journey within two working days. No payment, no obligation.":"Nous plions une première esquisse de votre voyage sous deux jours ouvrés. Sans paiement, sans engagement.","Please add your name and a valid email so we can reply.":"Merci d’indiquer votre nom et un e-mail valide pour que nous puissions répondre.","← Back":"← Retour","Continue":"Continuer","Send my sheet":"Envoyer ma feuille","Step 1 of 4":"Étape 1 sur 4","Step 2 of 4":"Étape 2 sur 4","Step 3 of 4":"Étape 3 sur 4","Step 4 of 4":"Étape 4 sur 4","Who":"Qui","When":"Quand","What":"Quoi","You":"Vous","Who is travelling?":"Qui voyage ?","Tell us who is coming. It changes the rooms, the pace and the guide we choose for you.":"Dites-nous qui vient. Cela change les chambres, le rythme et le guide que nous choisissons pour vous.","When, and for how long?":"Quand, et pour combien de temps ?","A month is enough. We will tell you what that month is like and whether to shift it.":"Un mois suffit. Nous vous dirons à quoi ressemble ce mois-là et s’il vaut mieux le décaler.","What pulls you?":"Qu’est-ce qui vous attire ?","Pick anything that sounds right. There are no wrong answers and no minimum.":"Choisissez tout ce qui vous parle. Il n’y a pas de mauvaise réponse ni de minimum.","Where can we reach you?":"Où pouvons-nous vous joindre ?","A first sketch of your journey goes out within two working days.":"Une première esquisse de votre voyage part sous deux jours ouvrés.","A couple":"En couple","A family":"En famille","Friends":"Entre amis","Solo":"En solo","A celebration":"Une célébration","Spring":"Printemps","Summer":"Été","Autumn":"Automne","Winter":"Hiver","Sakura, mild days":"Sakura, journées douces","Festivals, humid":"Festivals, humide","Maples, clear skies":"Érables, ciel clair","Snow, onsen steam":"Neige, vapeur d’onsen","SPRING · 春":"PRINTEMPS · 春","SUMMER · 夏":"ÉTÉ · 夏","AUTUMN · 秋":"AUTOMNE · 秋","WINTER · 冬":"HIVER · 冬","Jan":"Janv.","Feb":"Févr.","Mar":"Mars","Apr":"Avr.","May":"Mai","Jun":"Juin","Jul":"Juil.","Aug":"Août","Sep":"Sept.","Oct":"Oct.","Nov":"Nov.","Dec":"Déc.","7 days":"7 jours","10 days":"10 jours","12 days":"12 jours","14 days":"14 jours","18 days":"18 jours","Temples and gardens":"Temples et jardins","Food and markets":"Cuisine et marchés","Walking":"Randonnée","Onsen":"Onsen","Art and architecture":"Art et architecture","Craft workshops":"Ateliers d’artisanat","Trains":"Trains","Nightlife":"Vie nocturne","Nature":"Nature","Photography":"Photographie","Slow":"Lent","One thing a day":"Une chose par jour","Balanced":"Équilibré","Room to wander":"Du temps pour flâner","See a lot":"Voir beaucoup","Early starts":"Départs matinaux","Open to anything":"Ouvert à tout","FIRST CREASE MADE":"PREMIER PLI FAIT","Thank you,":"Merci,",". Your sheet is with us.":". Votre feuille est entre nos mains.","traveller":"voyageur","We will read what you wrote, pick the guide who fits it best, and send a first sketch of your journey to":"Nous lirons ce que vous avez écrit, choisirons le guide qui vous correspond le mieux, et enverrons une première esquisse de votre voyage à","within two working days.":"sous deux jours ouvrés.","Read the journal while you wait":"Lire le journal en attendant","Back to the start":"Retour à l’accueil","ABOUT KAMIWA":"À PROPOS DE KAMIWA","A small studio in Kyoto that plans one journey at a time.":"Un petit studio à Kyoto qui prépare un voyage à la fois.","Kamiwa means paper and harmony. We began in 2014 as three guides who kept meeting the same tired travellers: people who had seen everything and remembered very little. We started planning trips for friends, then friends of friends.":"Kamiwa signifie papier et harmonie. Nous avons commencé en 2014, trois guides qui croisaient sans cesse les mêmes voyageurs fatigués : des gens qui avaient tout vu et ne se souvenaient de presque rien. Nous avons d’abord organisé des voyages pour des amis, puis pour des amis d’amis.","Today we shape around forty private journeys a year. Never more. Each one is built by the guide who will meet you at the station, so the plan and the person are the same thing.":"Aujourd’hui, nous façonnons une quarantaine de voyages privés par an. Jamais plus. Chacun est conçu par le guide qui vous accueillera à la gare : le programme et la personne ne font qu’un.","JOURNEYS A YEAR":"VOYAGES PAR AN","YEARS IN KYOTO":"ANS À KYOTO","GUIDES, ALL LOCAL":"GUIDES, TOUS LOCAUX","THE GUIDES":"LES GUIDES","The people who will meet you":"Les personnes qui vous accueilleront","KYOTO · TEA AND TEMPLES":"KYOTO · THÉ ET TEMPLES","NAKASENDŌ · WALKING":"NAKASENDŌ · RANDONNÉE","TOKYO · FOOD AND NIGHT":"TOKYO · CUISINE ET NUIT","Born in Higashiyama, trained in Urasenke tea for twenty years. Aiko knows which temple gates open early and which abbots like visitors.":"Née à Higashiyama, formée au thé Urasenke pendant vingt ans. Aiko sait quelles portes de temple s’ouvrent tôt et quels abbés aiment les visiteurs.","Grew up in Tsumago, where his parents still run an inn. Kenji has walked the Kiso road more than a thousand times and still points at things.":"A grandi à Tsumago, où ses parents tiennent encore une auberge. Kenji a parcouru la route de Kiso plus de mille fois et montre encore des choses du doigt.","Former sous-chef, now our Tokyo lead. Mio books the eight-seat counters and knows which izakaya to walk into at midnight.":"Ancienne sous-chef, aujourd’hui responsable de Tokyo. Mio réserve les comptoirs de huit places et sait dans quel izakaya entrer à minuit.","Notes from the road.":"Carnets de route.","READ ·":"LIRE ·","SEP 2026":"SEPT. 2026","AUG 2026":"AOÛT 2026","JUL 2026":"JUIL. 2026","JUN 2026":"JUIN 2026","MAY 2026":"MAI 2026","APR 2026":"AVR. 2026","What a tea master taught us about rain":"Ce qu’un maître de thé nous a appris sur la pluie","We asked Sato-sensei why the ceremony felt different in September. He said the water knows.":"Nous avons demandé à Sato-sensei pourquoi la cérémonie semblait différente en septembre. Il a répondu que l’eau le sait.","Eight kilometres, three hundred years":"Huit kilomètres, trois cents ans","Kenji on why the Magome to Tsumago walk is the right length, and why the bear bells are not a joke.":"Kenji explique pourquoi la marche de Magome à Tsumago a la bonne longueur, et pourquoi les clochettes à ours ne sont pas une blague.","The fish market after the tourists left":"Le marché aux poissons après le départ des touristes","Toyosu at five in the morning is loud, cold and worth it. Mio explains how to do it without being in the way.":"Toyosu à cinq heures du matin : bruyant, froid, et ça vaut le coup. Mio explique comment y aller sans gêner.","Why we plan forty journeys a year and not fifty":"Pourquoi nous préparons quarante voyages par an, et pas cinquante","A note from the studio on saying no, and what it buys the people we say yes to.":"Une note du studio sur l’art de dire non, et ce que cela apporte à ceux à qui nous disons oui.","How to sit in an onsen without worrying":"Profiter d’un onsen sans stress","Tattoos, towels, which side to wash on. Everything first-timers ask us, answered once.":"Tatouages, serviettes, de quel côté se laver. Tout ce que les débutants nous demandent, enfin répondu.","A museum you sleep in":"Un musée où l’on dort","Two nights at Benesse House, and why we always book the ferry before the room.":"Deux nuits à Benesse House, et pourquoi nous réservons toujours le ferry avant la chambre.","Write to us. A person replies.":"Écrivez-nous. Une personne vous répond.","We answer every message within two working days, in English or Japanese. If it is urgent while you travel, the concierge line is on your itinerary.":"Nous répondons à chaque message sous deux jours ouvrés, en anglais, en français ou en japonais. En cas d’urgence pendant le voyage, la ligne de conciergerie figure sur votre itinéraire.","HOURS":"HORAIRES","Mon–Fri, 9:00–18:00 JST":"Lun–ven, 9 h–18 h (heure du Japon)","Delivered.":"Envoyé.","We will be in touch within two working days.":"Nous revenons vers vous sous deux jours ouvrés.","Please fill in all three fields.":"Merci de remplir les trois champs.","Send message":"Envoyer le message","Tell us a little about the trip you have in mind.":"Parlez-nous un peu du voyage que vous imaginez.","Private journeys through Japan, folded around you. Kyoto · est. 2014.":"Voyages privés au Japon, pliés autour de vous. Kyoto · depuis 2014.","EXPLORE":"EXPLORER","About & guides":"À propos & guides","Travel agency licence · Kyoto Pref. No. 3-1042":"Licence d’agence de voyage · Préf. de Kyoto n° 3-1042"};
+const I18N_ATTRS = ['placeholder', 'aria-label', 'alt', 'title'];
+const norm = t => t.replace(/\s+/g, ' ').trim();
+function translateTree(root, lang) {
+  const fr = lang === 'fr';
+  const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, { acceptNode: n => n.parentElement && /^(SCRIPT|STYLE)$/.test(n.parentElement.tagName) ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT });
+  let n; while ((n = w.nextNode())) {
+    if (n.__set !== undefined && n.nodeValue !== n.__set) { n.__en = undefined; }
+    if (n.__en === undefined) n.__en = n.nodeValue;
+    const en = n.__en, key = norm(en), tr = fr && FR[key];
+    const want = tr ? en.replace(key.length && en.includes(key) ? key : en.trim(), tr) : en;
+    if (n.nodeValue !== want) n.nodeValue = want;
+    n.__set = want;
+  }
+  root.querySelectorAll('[placeholder],[aria-label],[alt],[title]').forEach(el => {
+    el.__en = el.__en || {};
+    I18N_ATTRS.forEach(a => { if (!el.hasAttribute(a)) return; const cur = el.getAttribute(a); if (el.__set && el.__set[a] !== undefined && cur !== el.__set[a]) el.__en[a] = undefined; if (el.__en[a] === undefined) el.__en[a] = cur; const en = el.__en[a]; const want = fr && FR[norm(en)] ? FR[norm(en)] : en; if (cur !== want) el.setAttribute(a, want); el.__set = el.__set || {}; el.__set[a] = want; });
+  });
+}
+
+class Component extends DCLogic {
+  state = { lang: this.props.lang === 'fr' ? 'fr' : 'en', page: null, trans: 'idle', scene: 0, mobile: false, menu: false, intro: true, step: Math.min(3, Math.max(0, Number(this.props.planStep) || 0)), planError: false, contactError: false, contactSent: false, dest: null,
+    plan: { who: 'A couple', month: 'Oct', days: '12 days', interests: [], pace: 'Balanced', name: '', email: '', notes: '' },
+    contact: { name: '', email: '', msg: '' } };
+  rootRef = React.createRef(); trackRef = React.createRef(); frameRef = React.createRef(); heroRef = React.createRef(); progRef = React.createRef(); cursorRef = React.createRef(); mx = 0; my = 0;
+  componentDidMount() {
+    this.onScroll = () => { const t = this.trackRef.current; if (!t || this.pinned() >= 0) return; const r = t.getBoundingClientRect(); const span = Math.max(1, r.height - window.innerHeight); const p = Math.min(1, Math.max(0, -r.top / span)); this.progress = p; if (this.progRef.current) this.progRef.current.style.transform = 'scaleX(' + p.toFixed(4) + ')'; const cur = this.state.scene, raw = p * 4; let s = Math.min(3, Math.floor(raw)); if (s !== cur && Math.abs(raw - (s > cur ? s : cur)) < 0.04) s = cur; if (s !== cur) { this.setState({ scene: s }); this.post({ type: 'kamiwa:scene', index: s }); } };
+    this.onMove = e => { if (this.pinned() >= 0 && !this.cursorRef.current) return; const w = window.innerWidth, hh = window.innerHeight; if (this.pinned() < 0) this.post({ type: 'kamiwa:mouse', x: (e.clientX / w - .5) * 2, y: (e.clientY / hh - .5) * 2 });
+      const c = this.cursorRef.current; if (c && !this.state.mobile) { const hot = e.target.closest && e.target.closest('button,a,input,textarea'); c.style.opacity = '1'; c.style.transform = `translate(${e.clientX}px,${e.clientY}px) translate(-50%,-50%) rotate(45deg) scale(${hot ? 2.6 : 1})`; c.style.background = hot ? 'rgba(200,65,43,.18)' : '#C8412B'; c.style.borderColor = hot ? '#C8412B' : 'transparent'; } };
+    window.addEventListener('scroll', this.onScroll, { passive: true }); document.addEventListener('scroll', this.onScroll, { passive: true, capture: true }); window.addEventListener('mousemove', this.onMove, { passive: true });
+    const loop = () => { if (this.pinned() >= 0) return; const t = this.trackRef.current; if (t) { const top = t.getBoundingClientRect().top; if (top !== this.lastTop) { this.lastTop = top; this.onScroll(); } } this.raf = requestAnimationFrame(loop); }; loop();
+    this.ro = new ResizeObserver(en => { try { this.measure(en[0] && en[0].contentRect.width); } catch (e) { console.warn('measure', e); } });
+    this.onWinResize = () => this.measure(); window.addEventListener('resize', this.onWinResize);
+    this.observeRoot(); this.measure(); requestAnimationFrame(() => { this.observeRoot(); this.measure(); }); this.measureTimers = [100, 300, 1000, 2500].map(t => setTimeout(() => { this.observeRoot(); this.measure(); }, t));
+    this.applyPinned(); this.onScroll();
+    this.introTimer = setTimeout(() => this.setState({ intro: false }), this.pinned() >= 0 ? 0 : 3200);
+    this.onLeave = () => { if (this.cursorRef.current) this.cursorRef.current.style.opacity = '0'; }; document.addEventListener('mouseleave', this.onLeave);
+    this.mo = new MutationObserver(() => { if (this.state.lang !== 'fr' && !this.wasFr) return; clearTimeout(this.i18nT); this.i18nT = setTimeout(() => this.applyLang(), 0); });
+    if (this.rootRef.current) this.mo.observe(this.rootRef.current, { childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: I18N_ATTRS });
+    this.applyLang(); setTimeout(() => this.applyLang(), 60); this.bindFrame();
+  }
+  measure(width) { const r = this.rootRef.current; const w = width || (r ? r.getBoundingClientRect().width : 0) || window.innerWidth; if (!w) return; const dev = this.device(); const m = dev === 'mobile' || (dev === 'auto' && w < 780); const wb = Math.round(w / 60) * 60; const cp = w < 1180; if (m !== this.state.mobile || wb !== this.state.w || cp !== this.state.compact) { const was = this.state.mobile; this.setState({ mobile: m, w: wb, compact: cp }); if (m !== was) setTimeout(() => this.frameLoad(), 50); } }
+  observeRoot() { const r = this.rootRef.current; if (!r || r === this.observed || !this.ro) return; if (this.observed) this.ro.unobserve(this.observed); this.observed = r; this.ro.observe(r); }
+  bindFrame() { const f = this.frameRef.current; if (f && f !== this.boundFrame) { this.boundFrame = f; f.addEventListener('load', () => this.frameLoad()); if (!f.getAttribute('src')) f.setAttribute('src', ['dio', 'rama.html'].join('')); } }
+  applyLang() { const r = this.rootRef.current; if (!r) return; const fr = this.state.lang === 'fr'; if (!fr && !this.wasFr) return; translateTree(r, this.state.lang); this.mo && this.mo.takeRecords(); this.wasFr = fr; r.setAttribute('lang', this.state.lang); }
+  componentDidUpdate(pp, ps) { this.bindFrame(); this.observeRoot(); if (pp.device !== this.props.device) this.measure(); if (pp.lang !== this.props.lang) this.setState({ lang: this.props.lang === 'fr' ? 'fr' : 'en' }, () => this.applyLang()); if (ps && ps.lang !== this.state.lang) this.applyLang(); if (pp.page !== this.props.page) this.setState({ page: this.props.page, step: 0 }); if (pp.pinnedScene !== this.props.pinnedScene) { this.applyPinned(); this.frameLoad(); this.forceUpdate(); } if (pp.dest !== this.props.dest) this.setState({ dest: this.props.dest }); this.applyPinned(); }
+  componentWillUnmount() { window.removeEventListener('resize', this.onWinResize); (this.measureTimers || []).forEach(clearTimeout); this.mo && this.mo.disconnect(); clearTimeout(this.i18nT); clearTimeout(this.introTimer); document.removeEventListener('mouseleave', this.onLeave); cancelAnimationFrame(this.raf); window.removeEventListener('scroll', this.onScroll); document.removeEventListener('scroll', this.onScroll, true); window.removeEventListener('mousemove', this.onMove); if (this.ro) this.ro.disconnect(); }
+  device() { return this.props.device ?? 'auto'; }
+  pinned() { const p = Number(this.props.pinnedScene); return isNaN(p) ? -1 : p; }
+  applyPinned() { const p = this.pinned() >= 0, hh = this.device() === 'mobile' ? '790px' : '900px'; const t = this.trackRef.current; if (t) t.style.height = p ? hh : '400vh'; const hr = this.heroRef.current; if (hr) { hr.style.height = p ? hh : '100vh'; } }
+  post(m) { const f = this.frameRef.current; if (f && f.contentWindow) f.contentWindow.postMessage(m, '*'); }
+  frameLoad() { const p = this.pinned(); this.post({ type: 'kamiwa:config', scene: p >= 0 ? p : this.state.scene, static: p >= 0, mobile: this.state.mobile || this.device() === 'mobile' }); }
+  go(page, extra) { const cur = this.state.page ?? this.props.page ?? 'home'; if (page === cur && !extra) { this.setState({ menu: false }); return; }
+    this.setState({ trans: 'out', menu: false });
+    setTimeout(() => { this.setState(Object.assign({ page, trans: 'in' }, extra || {})); window.scrollTo(0, 0); setTimeout(() => this.setState({ trans: 'idle' }), 40); }, 380); }
+  toScene(i) { const t = this.trackRef.current; if (!t) return; if (this.pinned() >= 0) { this.setState({ scene: i }); this.post({ type: 'kamiwa:scene', index: i }); return; } const span = t.offsetHeight - window.innerHeight; window.scrollTo({ top: t.offsetTop + (i + 0.35) * span / 4, behavior: 'smooth' }); }
+  setPlan(k, v) { this.setState(s => ({ plan: Object.assign({}, s.plan, { [k]: v }), planError: false })); }
+  setContact(k, v) { this.setState(s => ({ contact: Object.assign({}, s.contact, { [k]: v }), contactError: false })); }
+  renderVals() {
+    const S = this.state, page = S.page ?? this.props.page ?? 'home';
+    const scene = this.pinned() >= 0 ? this.pinned() : S.scene;
+    const is = k => page === k;
+    const BUNDLED = typeof window !== 'undefined' && !!window.__resources;
+    const useImage = BUNDLED || this.props.liveDiorama === false || (this.props.liveDiorama == null && this.pinned() >= 0);
+    const pageStyle = { position: 'relative', transformOrigin: 'top center',
+      transform: S.trans === 'out' ? 'perspective(1400px) rotateX(-72deg) translateY(-60px) scale(.96)' : S.trans === 'in' ? 'perspective(1400px) rotateX(56deg) translateY(40px) scale(.98)' : 'none',
+      filter: S.trans === 'idle' ? undefined : 'brightness(.62)', opacity: S.trans === 'idle' ? 1 : 0, transition: S.trans === 'in' ? 'none' : S.trans === 'out' ? 'transform .42s cubic-bezier(.7,0,.9,.5), opacity .38s ease, filter .3s ease' : 'transform .7s cubic-bezier(.2,.75,.2,1), opacity .55s ease, filter .6s ease' };
+    const heroTexts = SCENES.map((s, i) => { const a = i === scene; return Object.assign({}, s, {
+      st: Object.assign(S.mobile ? { top: 0 } : { bottom: 0 }, { position: 'absolute', left: 0, width: '100%', opacity: a && !S.intro ? 1 : 0, transform: a && !S.intro ? 'translateY(0)' : 'translateY(26px)', transition: a ? 'opacity .7s .2s, transform .9s .2s cubic-bezier(.2,.7,.2,1)' : 'opacity .3s, transform .4s', pointerEvents: a ? 'auto' : 'none' }),
+      hidden: !a, next: () => this.toScene((i + 1) % 4), nextLabel: i === 3 ? 'Fold again' : 'Next fold', go: () => this.toScene(i),
+      dot: { display: 'flex', alignItems: 'center', gap: 10, background: 'none', border: 0, cursor: 'pointer', padding: S.mobile ? '10px 6px' : '4px 0', color: '#1C1917' },
+      dotLabel: { display: this.state.mobile ? 'none' : 'block', font: "700 9.5px/1 'Zen Kaku Gothic New',sans-serif", letterSpacing: '.18em', textTransform: 'uppercase', opacity: a ? 1 : 0, transform: a ? 'none' : 'translateX(8px)', transition: 'all .4s' },
+      dotMark: { width: a ? 12 : 6, height: a ? 12 : 6, background: a ? '#C8412B' : 'rgba(28,25,23,.3)', transform: 'rotate(45deg)', transition: 'all .4s', display: 'block' } }); });
+    const navHome = is('home');
+    const navItems = navHome ? SCENES.map((s, i) => ({ label: s.name.toUpperCase(), go: () => this.toScene(i), st: { whiteSpace: 'nowrap', padding: '13px 16px', border: 0, cursor: 'pointer', font: "700 10px/1 'Zen Kaku Gothic New',sans-serif", letterSpacing: '.16em', background: i === scene ? '#1F2A5C' : 'transparent', color: i === scene ? '#F6EFE3' : '#1C1917', transition: 'all .3s' } }))
+      : [['DESTINATIONS', 'destinations'], ['JOURNEYS', 'journeys'], ['JOURNAL', 'journal'], ['ABOUT', 'about'], ['CONTACT', 'contact']].map(([label, p]) => ({ label, go: () => this.go(p), st: { whiteSpace: 'nowrap', padding: '13px 16px', border: 0, cursor: 'pointer', font: "700 10px/1 'Zen Kaku Gothic New',sans-serif", letterSpacing: '.16em', background: is(p) || (p === 'destinations' && is('detail')) ? '#1F2A5C' : 'transparent', color: is(p) || (p === 'destinations' && is('detail')) ? '#F6EFE3' : '#1C1917', transition: 'all .3s' } }));
+    const menuItems = [['Home', 'home'], ['Destinations', 'destinations'], ['Journeys', 'journeys'], ['Journal', 'journal'], ['About', 'about'], ['Contact', 'contact']].map(([label, p]) => ({ label, go: () => this.go(p) }));
+    const band = (c, hgt) => ({ position: 'relative', height: hgt, background: `linear-gradient(135deg, ${shade(c, 1.08)}, ${shade(c, .82)})`, display: 'grid', placeItems: 'center', overflow: 'hidden', width: '100%' });
+    const destId = S.dest ?? this.props.dest ?? 'kyoto';
+    const D = DEST.find(d => d.id === destId) || DEST[1];
+    const detail = Object.assign({}, D, { hero: { position: 'relative', background: `linear-gradient(120deg, ${shade(D.c, 1.05)}, ${shade(D.c, .78)})`, overflow: 'hidden' }, days: D.days.map(([n, t, b]) => ({ n, t, b })) });
+    const P = S.plan, step = S.step;
+    const stepList = STEPS.map((s, i) => ({ label: s[0], num: '0' + (i + 1), go: () => { if (i <= step) this.setState({ step: i }); },
+      st: { display: 'grid', gridTemplateColumns: '36px 1fr 20px', alignItems: 'center', gap: 12, textAlign: 'left', padding: '16px 0', background: 'none', border: 0, borderBottom: '1px solid rgba(28,25,23,.12)', cursor: i <= step ? 'pointer' : 'default', color: i === step ? '#1C1917' : i < step ? '#5A524B' : 'rgba(28,25,23,.4)', font: "500 15px/1 'Zen Kaku Gothic New',sans-serif", transition: 'color .3s' },
+      numSt: { font: "400 20px/1 'Shippori Mincho',serif", color: i === step ? '#C8412B' : 'inherit' }, check: { color: '#3F5A46', opacity: i < step ? 1 : 0, transition: 'opacity .3s' } }));
+    const pick = (list, key, multi) => list.map(v => { const on = multi ? P[key].includes(v) : P[key] === v; return { label: v, st: on ? BTN_ON : BTN_OFF, go: () => this.setPlan(key, multi ? (on ? P[key].filter(x => x !== v) : P[key].concat(v)) : v) }; });
+    const whoList = WHO.map(([kanji, label, c]) => { const on = P.who === label; return { kanji, label, go: () => this.setPlan('who', label), st: Object.assign({}, BTN_OFF, { display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 14, padding: '18px 16px', minHeight: 112, position: 'relative', background: on ? c : '#fff', color: on ? '#FFF6EA' : '#1C1917', borderColor: on ? c : 'rgba(28,25,23,.2)' }), kSt: { font: "400 38px/1 'Shippori Mincho',serif", color: on ? '#FFF6EA' : c }, dot: { position: 'absolute', right: 14, top: 14, width: 8, height: 8, transform: 'rotate(45deg)', background: on ? '#FFF6EA' : c, opacity: on ? 1 : .5 } }; });
+    const season = SEASONS.find(s => s.months.includes(P.month)) || SEASONS[2];
+    const seasonList = SEASONS.map(s => { const act = s === season; return { k: s.k, name: s.name, note: s.note, st: { padding: '14px 16px', border: '1px solid ' + (act ? s.c : 'rgba(28,25,23,.15)'), background: act ? shade(s.c, 1.9) : '#fff', transition: 'all .25s' }, kSt: { width: 40, height: 40, display: 'grid', placeItems: 'center', background: s.c, color: '#fff', font: "400 22px/1 'Shippori Mincho',serif", flex: 'none' }, months: s.months.map(m => { const on = P.month === m; return { label: m, go: () => this.setPlan('month', m), st: Object.assign({}, BTN_OFF, { flex: 1, padding: '10px 6px', background: on ? s.c : '#fff', color: on ? '#fff' : '#1C1917', borderColor: on ? s.c : 'rgba(28,25,23,.2)' }) }; }) }; });
+    const interestList = INTERESTS.map(([kanji, label]) => { const on = P.interests.includes(label); return { kanji, label, go: () => this.setPlan('interests', on ? P.interests.filter(x => x !== label) : P.interests.concat(label)), st: Object.assign({}, BTN_OFF, { display: 'inline-flex', alignItems: 'center', gap: 8, padding: '10px 14px 10px 10px', background: on ? '#C8412B' : '#fff', color: on ? '#FFF6EA' : '#1C1917', borderColor: on ? '#C8412B' : 'rgba(28,25,23,.2)' }), kSt: { font: "400 18px/1 'Shippori Mincho',serif", color: on ? '#FFF6EA' : '#C8412B' } }; });
+    const paceList = PACES.map(([kanji, label, note]) => { const on = P.pace === label; return { kanji, label, note, go: () => this.setPlan('pace', label), st: Object.assign({}, on ? BTN_ON : BTN_OFF, { display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 8, padding: '14px 16px' }) }; });
+    const progSegs = [0, 1, 2, 3].map(i => ({ st: { flex: 1, height: 3, display: 'block', background: i <= step ? '#C8412B' : 'rgba(28,25,23,.12)', transition: 'background .3s' } }));
+    const validEmail = e => /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e);
+    const nextStep = () => { if (step < 3) { this.setState({ step: step + 1 }); return; } if (!P.name.trim() || !validEmail(P.email)) { this.setState({ planError: true }); return; } this.go('confirm'); };
+    const T = s => S.lang === 'fr' ? (FR[s] ?? s) : s;
+    const summaryList = [['WHO', T(P.who)], ['WHEN', T(P.month) + ' · ' + T(P.days)], ['PULLS', P.interests.length ? P.interests.slice(0, 3).map(T).join(', ') : T('Open to anything')], ['PACE', T(P.pace)]].map(([k, v]) => ({ k, v }));
+    const guides = GUIDES.map(g => Object.assign({}, g, { avatar: { width: 72, height: 72, display: 'grid', placeItems: 'center', background: g.c, color: '#fff', font: "400 32px/1 'Shippori Mincho',serif", clipPath: 'polygon(50% 0,100% 50%,50% 100%,0 50%)' } }));
+    return {
+      rootRef: this.rootRef, trackRef: this.trackRef, heroRef: this.heroRef, progRef: this.progRef, cursorRef: this.cursorRef, frameRef: this.frameRef, frameLoad: () => this.frameLoad(), pageStyle, heroTexts,
+      riseAnim: this.props.motion === false ? 'none' : 'rise .6s both', riseAnim2: this.props.motion === false ? 'none' : 'rise .7s both',
+      useFrame: !useImage, useImage, minusOne: -1,
+      railStyle: S.mobile ? { position: 'absolute', left: 0, right: 0, top: '45%', display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 18, zIndex: 3 } : { position: 'absolute', right: '3cqw', top: '50%', transform: 'translateY(-50%)', display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 14 },
+      heroMediaStyle: S.mobile ? { position: 'absolute', left: 0, right: 0, top: 0, height: '44%' } : { position: 'absolute', inset: 0 },
+      heroTextStyle: S.mobile ? { position: 'absolute', left: '6cqw', right: '6cqw', top: '50%', bottom: 24, zIndex: 2 } : { position: 'absolute', left: '5cqw', right: '5cqw', bottom: 'max(24px,6vh)', maxWidth: 440, height: 340, zIndex: 2 },
+      heroVeilStyle: S.mobile ? { display: 'none' } : { position: 'absolute', inset: '-60px -120px -40px -80px', background: 'radial-gradient(ellipse 70% 75% at 35% 65%,#F6EFE3 40%,rgba(246,239,227,.92) 62%,rgba(246,239,227,0) 100%)', pointerEvents: 'none' }, sceneImages: useImage ? [{ st: Object.assign({ backgroundImage: 'url(' + sceneSrc(scene) + ')', backgroundSize: 'contain', backgroundRepeat: 'no-repeat', backgroundPosition: 'center' }, S.mobile ? { position: 'absolute', left: 0, top: 0, width: '100%', height: '100%', pointerEvents: 'none' } : { position: 'absolute', left: '22%', top: '2%', width: '76%', height: '92%', pointerEvents: 'none' }) }] : [], navItems, menuItems, menu: S.menu,
+      setEn: () => this.setState({ lang: 'en' }, () => this.applyLang()), setFr: () => this.setState({ lang: 'fr' }, () => this.applyLang()),
+      langEnSt: { minWidth: 44, minHeight: 40, padding: '0 10px', border: 0, cursor: 'pointer', font: "700 10px/1 'Zen Kaku Gothic New',sans-serif", letterSpacing: '.16em', background: S.lang === 'en' ? '#1C1917' : 'transparent', color: S.lang === 'en' ? '#F6EFE3' : '#1C1917' },
+      langFrSt: { minWidth: 44, minHeight: 40, padding: '0 10px', border: 0, cursor: 'pointer', font: "700 10px/1 'Zen Kaku Gothic New',sans-serif", letterSpacing: '.16em', background: S.lang === 'fr' ? '#1C1917' : 'transparent', color: S.lang === 'fr' ? '#F6EFE3' : '#1C1917' },
+      isDesktop: !S.mobile, isMobile: S.mobile, showCta: !S.mobile && !S.compact, toggleMenu: () => this.setState(s => ({ menu: !s.menu })),
+      isHome: is('home'), isDestinations: is('destinations'), isDetail: is('detail'), isJourneys: is('journeys'), isPlan: is('plan'), isConfirm: is('confirm'), isAbout: is('about'), isJournal: is('journal'), isContact: is('contact'),
+      goHome: () => this.go('home'), goDestinations: () => this.go('destinations'), goJourneys: () => this.go('journeys'), goPlan: () => this.go('plan', { step: 0, planError: false }), goAbout: () => this.go('about'), goJournal: () => this.go('journal'), goContact: () => this.go('contact'),
+       steps: [{ num: '一', title: 'We listen first', body: 'A forty-minute call, or a long email if you prefer. Who is coming, what you have loved elsewhere, what you are tired of.' }, { num: '二', title: 'We fold a first sketch', body: 'A route, a rhythm and the guide who fits. Rooms we have slept in, restaurants we have eaten in, nothing off a list.' }, { num: '三', title: 'We travel with you', body: 'Your guide meets you at the station. A concierge line stays open the whole way. Plans bend when the weather or your mood does.' }],
+      packages: PKG.map(p => Object.assign({}, p, { band: band(p.c, 200), tile: { width: 88, height: 88, flex: 'none', display: 'grid', placeItems: 'center', background: p.c, color: '#fff', font: "400 44px/1 'Shippori Mincho',serif" }, go: () => this.go('journeys'), enquire: () => this.go('plan', { step: 0 }) })),
+      destinations: DEST.map(d => Object.assign({}, d, { band: band(d.c, 220), go: () => this.go('detail', { dest: d.id }) })),
+      detail, guides, posts: POSTS.map(p => Object.assign({}, p, { band: band(p.c, 120) })),
+      stepTitle: STEPS[step][1], stepBody: STEPS[step][2], stepList, step0: step === 0, step1: step === 1, step2: step === 2, step3: step === 3,
+      whoList, seasonList, dayList: pick(['7 days', '10 days', '12 days', '14 days', '18 days'], 'days'), interestList, paceList, progSegs, stepCount: 'Step ' + (step + 1) + ' of 4',
+      sheetBand: { height: 74, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 22px', background: season.c, color: '#FFF6EA', transition: 'background .4s' }, sheetWhoKanji: (WHO.find(w => w[1] === P.who) || WHO[0])[0], sheetSeasonName: season.name.toUpperCase() + ' · ' + season.k, sheetPulls: P.interests.length ? P.interests.slice(0, 2).map(T).join(', ') + (P.interests.length > 2 ? ' +' + (P.interests.length - 2) : '') : T('Open to anything'),
+      plan: P, setName: e => this.setPlan('name', e.target.value), setEmail: e => this.setPlan('email', e.target.value), setNotes: e => this.setPlan('notes', e.target.value),
+      planError: S.planError, planSummary: `${P.who} · ${P.month} · ${P.days}`, nextLabel: step < 3 ? 'Continue' : 'Send my sheet', nextStep, prevStep: () => this.setState({ step: Math.max(0, step - 1) }),
+      backSt: { background: 'none', border: 0, padding: '14px 0', cursor: 'pointer', color: '#5A524B', font: "700 11px/1 'Zen Kaku Gothic New',sans-serif", letterSpacing: '.16em', textTransform: 'uppercase', visibility: step > 0 ? 'visible' : 'hidden' },
+      planFirstName: (P.name.trim().split(' ')[0]) || 'traveller', summaryList,
+      contact: S.contact, setCName: e => this.setContact('name', e.target.value), setCEmail: e => this.setContact('email', e.target.value), setCMsg: e => this.setContact('msg', e.target.value),
+      contactError: S.contactError, contactSent: S.contactSent, contactOpen: !S.contactSent,
+      sendContact: () => { const c = S.contact; if (!c.name.trim() || !validEmail(c.email) || !c.msg.trim()) { this.setState({ contactError: true }); return; } this.setState({ contactSent: true }); }
+    };
+  }
+}
+</script>
+</body>
+</html>
