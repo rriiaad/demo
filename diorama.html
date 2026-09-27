@@ -176,7 +176,7 @@ S(3, () => { // Your Japan
   pagoda(1.9, -0.55, 0.95);
   for (let i = 0; i < 6; i++) cyl(0.17, 0.17, 0.04, 8, 0xD4BF96, -0.4 + i * 0.42, G + 0.02, 0.7 - i * 0.24);
   pine(-1.95, -1.25, 0.9); pine(2.25, 1.35, 0.7); maple(-2.05, 1.65, 0.85); maple(1.05, 1.85, 0.75, 0xF2C1C6);
-  lantern(-0.2, -1.65, 0.55); lantern(2.0, 0.35, 0.55);
+  lantern(-0.2, -1.65, 0.55); lantern(0.35, 1.6, 0.55);
 });
 { // origami crane — global flyer
   craneRig = grp(-0.9, G + 2.0, 1.0); crane = grp(0, 0, 0, craneRig); crane.rotation.y = -Math.PI / 2; crane.scale.setScalar(0.52); craneRig.rotation.order = 'YXZ';
@@ -210,7 +210,7 @@ const LAND_YAW = 0.85, LAND_DIR = new THREE.Vector3(Math.sin(LAND_YAW), 0, Math.
 const PERCH = new THREE.Vector3(-0.4, G + 0.06 + 0.16, -0.45);
 const BEHIND = new THREE.Vector3(LAND_DIR.z, 0, -LAND_DIR.x); // away from camera
 const P = (b, l, y) => PERCH.clone().addScaledVector(BEHIND, b).addScaledVector(LAND_DIR, l).add(new THREE.Vector3(0, y, 0));
-const START = P(3.0, -2.2, 2.3);
+const START = P(0, -6.5, 3.3);
 const angDiff = (a, b) => { let d = b - a; while (d > Math.PI) d -= 2 * Math.PI; while (d < -Math.PI) d += 2 * Math.PI; return d; };
 const smooth = (a, b, x) => { const t = clamp01((x - a) / (b - a)); return t * t * (3 - 2 * t); };
 // ---- crane flight physics ----
@@ -271,7 +271,7 @@ function tick() {
       if (INTRO && it < (cur === 3 ? 1.4 : 2.0)) { craneRig.visible = false; havePrev = false; mode = null; }
       else if (INTRO && it < 5.6 && cur !== 3) { const q = easeIO(clamp01((it - 2.0) / 3.6)); flight.getPoint(q, craneRig.position); flight.getTangent(q, vel).multiplyScalar(flight.getLength() / 3.6 * 0.9); craneRig.visible = true; mode = 'intro'; }
       else if (cur === 3) {
-        if (!craneRig.visible) { craneRig.position.copy(START); vel.subVectors(P(2.4, -1.7, 2.0), START).setLength(FL.cruise); craneRig.visible = true; havePrev = false; mode = null; }
+        if (!craneRig.visible) { craneRig.position.copy(START); vel.subVectors(PERCH, START).setY(-0.35).setLength(FL.cruise); craneRig.visible = true; havePrev = false; mode = null; }
         if (mode !== 'land' && mode !== 'landed' && mode !== 'touch') { mode = 'land'; planLanding(); }
         if (mode === 'landed') { landed = true; }
         else if (mode === 'touch') { touchT += dt; const TD = 0.5 + touchFrom.distanceTo(PERCH) * 1.1, x = clamp01(touchT / TD), u = 1 - Math.pow(1 - x, 2.2); craneRig.position.lerpVectors(touchFrom, PERCH, u); vel.multiplyScalar(1 - k(8)); flareW = 1 - smooth(0.55, 1, x); if (x >= 1) { mode = 'landed'; restT = 0; vel.set(0, 0, 0); landed = true; } }
